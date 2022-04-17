@@ -1,12 +1,14 @@
+//appeler l'API
 fetch("http://localhost:3000/api/products")
   .then((res) => {
     if (res.ok) {
       return res.json();
     }
   })
+//Kanap data
   .then((products) => {
     products.forEach((kanap) => {
-      const items = document.querySelector(".items");
+      const items = document.querySelector("#items");
       const a = document.createElement("a");
       const article = document.createElement("article");
       const image = document.createElement("img");
