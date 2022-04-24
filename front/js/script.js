@@ -1,14 +1,23 @@
+
 //appeler l'API
+
 fetch("http://localhost:3000/api/products")
   .then((res) => {
-    if (res.ok) {
+    if(res.ok){
       return res.json();
     }
   })
-//Kanap data
+ 
+//Kanap Mise en place des produits
   .then((products) => {
-    products.forEach((kanap) => {
-      const items = document.querySelector("#items");
+    for (kanap of products) {
+      let elementProduct = displayProduct(kanap);
+      const items = document.getElementById('items');
+      items.appendChild(elementProduct);
+    }
+  });
+
+  function displayProduct(kanap) {
       const a = document.createElement("a");
       const article = document.createElement("article");
       const image = document.createElement("img");
@@ -29,5 +38,6 @@ fetch("http://localhost:3000/api/products")
       article.appendChild(image);
       article.appendChild(h3);
       article.appendChild(p);
-    });
-  });
+    
+    return a;
+    }
