@@ -39,7 +39,7 @@ fetch('http://localhost:3000/api/products/' + getId())
         select.options.add(newOption);
 
     };
-
+//Ajout du produit au panier - gestion de l'évenement click
     const quantite = document.getElementById('quantity');
     const bouton = document.getElementById('addToCart');
     const confirmation = () => {
@@ -48,9 +48,28 @@ fetch('http://localhost:3000/api/products/' + getId())
         }
     }
     bouton.addEventListener("click", (event) => {
-        setProductPanier();
         confirmation();
+//Localstorage
+// Stocker la récupération des valeurs du formulaire dans le localstorage
 
-    })
+//déclaration de la variable
 
+let productInLocalStorage = JSON.parse(localStorage.getItem('product'));
+
+console.log(productInLocalStorage);
+
+                                
+if(productInLocalStorage){                  // S'il y a déjà un produit enregistré
+productInLocalStorage.push(products);
+localStorage.setItem('product', JSON.stringify(productInLocalStorage));
+console.log(productInLocalStorage);
+}else{                                      // S'il n'y a pas déjà de produit enregistré
+    productInLocalStorage = [];
+    productInLocalStorage.push(products)
+    localStorage.setItem('product', JSON.stringify(productInLocalStorage));
+    console.log(productInLocalStorage);
+    };
+
+    });
 }
+
