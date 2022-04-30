@@ -40,16 +40,18 @@ fetch('http://localhost:3000/api/products/' + getId())
 
     };
  
-//Ajout du produit au panier - gestion de l'évenement click
+
     const quantite = document.getElementById('quantity');
     const bouton = document.getElementById('addToCart');
+
+    
 //Fenêtre pop-up de confirmation
     const confirmation = () => {
         if (window.confirm('Votre commande est bien ajoutée au panier.')) {
             window.location.href = "cart.html";
         }
     }
-
+//Ajout du produit au panier - gestion de l'évenement click
     bouton.addEventListener("click", (event) => {
         confirmation();
      
@@ -84,23 +86,20 @@ function addBasket(products) {
         }
 saveBasket(productInLocalStorage);
     }
- 
-
-*/
+ */
 
 
-//déclaration de la variable
-
+//Déclaration de la variable
+//Récupération du panier
 let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
-
 console.log(productInLocalStorage);
 
                                 
-if(productInLocalStorage){                  // S'il y a déjà un produit enregistré
+if(productInLocalStorage){                  // S'il y a déjà un produit enregistré dans le panier, ajouter produits
 productInLocalStorage.push(products);
 localStorage.setItem('panier', JSON.stringify(productInLocalStorage));
 console.log(productInLocalStorage);
-}else{                                      // S'il n'y a pas déjà de produit enregistré
+}else{                                      // S'il n'y a pas déjà de produit enregistré, envoyer array vide et ajouter produits
     productInLocalStorage = [];
     productInLocalStorage.push(products)
     localStorage.setItem('panier', JSON.stringify(productInLocalStorage));
