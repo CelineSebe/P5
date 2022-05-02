@@ -1,23 +1,29 @@
 
-//appeler l'API
+//Requêter l'API
 
 fetch("http://localhost:3000/api/products")
-  .then((res) => {
-    if(res.ok){
+  //1ère promesse: obtenir les données
+  .then(function(res){
+    if (res.ok){
       return res.json();
+  }
+})
+ 
+//2ème promesse: obtenir dans le DOM les items avec Id
+  .then(function(products) {
+    for (kanap of products) {
+      let card = createKanapCard(kanap);
+      const items = document.getElementById('items');
+      items.appendChild(card);
     }
   })
- 
-//Kanap Mise en place des produits
-  .then((products) => {
-    for (kanap of products) {
-      let elementProduct = displayProduct(kanap);
-      const items = document.getElementById('items');
-      items.appendChild(elementProduct);
-    }
+//Si l'API ne répond pas
+  .catch(function (err) {
+    console.log(err);
   });
-//DOM Objet affichage des éléments des produits
-  function displayProduct(kanap) {
+  
+//Mise en place d'une fonction pour les cards
+  function createKanapCard(kanap) {
       const a = document.createElement("a");
       const article = document.createElement("article");
       const image = document.createElement("img");
@@ -34,7 +40,8 @@ fetch("http://localhost:3000/api/products")
       p.innerHTML = kanap.description;
       a.href = "product.html?id=" + kanap._id;
       
-//Ajouts des éléments du produit au parent ITEM
+//Ajouts des éléments du produit aux éléments parents
+//A l'aide propriété appendChild
       items.appendChild(a);
       a.appendChild(article);
       article.appendChild(image);
