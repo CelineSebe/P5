@@ -26,7 +26,6 @@ fetch('http://localhost:3000/api/products/' + getId())
 
     })
  
-
  function createOneKanapCard(kanap) {
     const image = document.createElement('img');
     let itemsimg = document.querySelector('.item__img');
@@ -72,14 +71,14 @@ const confirmation = () => {
 //déclaration de la variable
 
 function addToLocalStorage(productInLocalStorage){
-    localStorage.setItem('panier', JSON.stringify(kanap));
+    localStorage.setItem('panier', JSON.stringify(productInLocalStorage));
     console.log(productInLocalStorage);
 }
 
 function getBasket() {   
 let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
 console.log(productInLocalStorage);                           
-if(productInLocalStorage == null){   
+if(productInLocalStorage == null){                      // S'il n'y a pas déjà de produit enregistré
     return [];               
 }else{
     productInLocalStorage.push(kanap);
@@ -116,7 +115,7 @@ addToLocalStorage(productInLocalStorage);
         localStorage.setItem('panier', JSON.stringify(productInLocalStorage)); 
         }
         console.log(kanap);
-    }*/
+    }
 
 
 
