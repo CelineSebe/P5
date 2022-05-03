@@ -24,6 +24,7 @@ fetch("http://localhost:3000/api/products")
   
 //Mise en place d'une fonction pour les cards
   function createKanapCard(kanap) {
+
       const a = document.createElement("a");
       const article = document.createElement("article");
       const image = document.createElement("img");

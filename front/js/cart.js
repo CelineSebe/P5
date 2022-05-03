@@ -1,11 +1,11 @@
 // Récupérer le formulaire
-const queryString_url__id = window.location.search; 
-console.log(queryString_url__id);
+const _id = window.location.search; 
+console.log(_id);
 
-document.querySelector("cart__order__form__submit").addEventListener("click",function(){
+document.querySelector(`.form input["submit"]`).addEventListener("click",function(){
     //champs à compléter
     var valid = true;
-    for(let input of document.querySelectorAll(".form input['submit']"){
+    for(let input of document.querySelectorAll(".form")){
         valid = valid && input.reportValidity();
         if(!valid){
             break;
@@ -14,4 +14,5 @@ document.querySelector("cart__order__form__submit").addEventListener("click",fun
     if(valid){
         alert ("Votre commande a bien été prise en compte");
     }
-});
+}
+);
