@@ -56,12 +56,14 @@ fetch('http://localhost:3000/api/products/' + getId())
             select.options.add(newOption);
         }
  }
+
  //-----------------Localstorage---------------------------//
 
  // La gestion du panier//
 
 const idForm = document.querySelector("#colors");
 const nameForm = document.querySelector("#title");
+const quantityForm = document.getElementById("quantity");
 
 // let idProduitSelectionne = products.find((kanap) => kanap._id === getId);
 // console.log(idProduitSelectionne);
@@ -74,13 +76,14 @@ btn_envoyerPanier.addEventListener("click", (e)=>{
 
     // Choix de l'option par l'utilisateur dans une variable
 const choixForm = idForm.value;
+const choixQuantity = quantityForm.value;
 
 // Stocker la récupération des valeurs du formulaire dans le localstorage
 let optionsProduit = {
     _id: getId(),
     name: nameForm,
     colors: choixForm,
-    quantite: 1,
+    quantite: choixQuantity,
 }
 console.log(optionsProduit);
 });
@@ -118,9 +121,9 @@ function addBasket(kanap){
 
 //Fenêtre pop-up de confirmation
 const quantite = document.getElementById('quantity');
-const confirmation = (kanap) => {
+const confirmation = () => {
     if (window.confirm('Votre commande est bien ajoutée au panier.')) {
-        window.location.href = "cart.html?id=" + kanap._id;
+        window.location.href = "cart.html?id=" + getId;
     }
 }
 //Ajout du produit au panier - gestion de l'évenement click
