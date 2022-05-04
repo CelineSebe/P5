@@ -1,10 +1,11 @@
+
 //Récupérer l'url
 function getId() {
     let onUrl= window.location.href;
     let url = new URL(onUrl);
     return url.searchParams.get("id");
 }
-console.log(getId);
+// console.log(getId);
 
 //Mise en place de l'Api en lien avec l'id du produit sélectionné
 fetch('http://localhost:3000/api/products/' + getId())
@@ -21,7 +22,7 @@ fetch('http://localhost:3000/api/products/' + getId())
     let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
     createOneKanapCard(kanap);
     addToLocalStorage(productInLocalStorage);
-    getBasket();
+    getBasket(kanap);
     addBasket(kanap);
     //loopForTotalQty(productInLocalStorage);
 
@@ -55,20 +56,47 @@ fetch('http://localhost:3000/api/products/' + getId())
             select.options.add(newOption);
         }
  }
- //Localstorage
+ //-----------------Localstorage---------------------------//
+
+ // La gestion du panier//
+
+const idForm = document.querySelector("#colors");
+const nameForm = document.querySelector("#title");
+
+// let idProduitSelectionne = products.find((kanap) => kanap._id === getId);
+// console.log(idProduitSelectionne);
+//Sélection du bouton ajouter l'article au panier
+const btn_envoyerPanier = document.querySelector("#addToCart");
+
+//Ecouter le bouton et envoyer le panier
+btn_envoyerPanier.addEventListener("click", (e)=>{
+    e.preventDefault();
+
+    // Choix de l'option par l'utilisateur dans une variable
+const choixForm = idForm.value;
+
 // Stocker la récupération des valeurs du formulaire dans le localstorage
+let optionsProduit = {
+    _id: getId(),
+    name: nameForm,
+    colors: choixForm,
+    quantite: 1,
+}
+console.log(optionsProduit);
+});
+
 
 //déclaration de la variable
 
 function addToLocalStorage(kanap){
     localStorage.setItem('panier', JSON.stringify(kanap));
-    console.log(addToLocalStorage);
+    // console.log(addToLocalStorage);
 }
 
-function getBasket() {   
+function getBasket(kanap) {   
 let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
-console.log(productInLocalStorage);                           
-if(productInLocalStorage == null){                      // S'il n'y a pas déjà de produit enregistré
+// console.log(productInLocalStorage);                           
+if(productInLocalStorage == null){                       // S'il n'y a pas déjà de produit enregistré
     return [];               
 }else{
     productInLocalStorage.push(kanap);
@@ -77,8 +105,8 @@ if(productInLocalStorage == null){                      // S'il n'y a pas déjà
 }
 
 function addBasket(kanap){
-    let productInLocalStorage = getBasket();
-    let foundProduct = productInLocalStorage.find((kanap) => kanap._id == _id);
+    let productInLocalStorage = getBasket(kanap);
+    let foundProduct = productInLocalStorage.find((kanap) => kanap._id === getId);
     if (foundProduct != undefined){
         foundProduct.quantite++;
     }else{
@@ -90,7 +118,7 @@ function addBasket(kanap){
 
 //Fenêtre pop-up de confirmation
 const quantite = document.getElementById('quantity');
-const confirmation = () => {
+const confirmation = (kanap) => {
     if (window.confirm('Votre commande est bien ajoutée au panier.')) {
         window.location.href = "cart.html?id=" + kanap._id;
     }
