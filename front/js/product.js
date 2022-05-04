@@ -19,11 +19,11 @@ fetch('http://localhost:3000/api/products/' + getId())
 
  // Deuxième promise
  .then(function getOneKanap (kanap) {
-    let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
+    // let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
     createOneKanapCard(kanap);
-    addToLocalStorage(productInLocalStorage);
-    getBasket(kanap);
-    addBasket(kanap);
+    // addToLocalStorage(productInLocalStorage);
+    // getBasket();
+    // addBasket(optionsProduit);
     //loopForTotalQty(productInLocalStorage);
 
  })
@@ -49,7 +49,7 @@ fetch('http://localhost:3000/api/products/' + getId())
     price = kanap.price;
     console.log(kanap.price);
     console.log(kanap);
-
+//Loop pour afficher toutes les options couleurs dans le formulaire
         for (let i = 0; i < kanap.colors.length; i++) {
             const newOption = new Option(kanap.colors[i]);
             newOption.value = kanap.colors[i];
@@ -70,10 +70,18 @@ const quantityForm = document.getElementById("quantity");
 //Sélection du bouton ajouter l'article au panier
 const btn_envoyerPanier = document.querySelector("#addToCart");
 
+
 //Ecouter le bouton et envoyer le panier
+const confirmation = () => {
+        if (window.confirm('Votre commande est bien ajoutée au panier.')) {
+            window.location.href = "cart.html?id=" + getId;
+        }
+    }
 btn_envoyerPanier.addEventListener("click", (e)=>{
     e.preventDefault();
-
+    confirmation();
+   
+        
     // Choix de l'option par l'utilisateur dans une variable
 const choixForm = idForm.value;
 const choixQuantity = quantityForm.value;
@@ -84,90 +92,22 @@ let optionsProduit = {
     name: nameForm,
     colors: choixForm,
     quantite: choixQuantity,
-}
+};
 console.log(optionsProduit);
-});
 
 
-//déclaration de la variable
 
-function addToLocalStorage(kanap){
-    localStorage.setItem('panier', JSON.stringify(kanap));
-    // console.log(addToLocalStorage);
-}
-
-function getBasket(kanap) {   
 let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
-// console.log(productInLocalStorage);                           
-if(productInLocalStorage == null){                       // S'il n'y a pas déjà de produit enregistré
-    return [];               
+console.log(productInLocalStorage);
+if(productInLocalStorage){
+    productInLocalStorage.push(optionsProduit);
+    localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
+    // confirmation();
 }else{
-    productInLocalStorage.push(kanap);
-    return JSON.parse(productInLocalStorage);           // S'il y a déjà un produit enregistré
-    }
+    productInLocalStorage = [];
+    productInLocalStorage.push(optionsProduit);
+    localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
+    console.log(productInLocalStorage);
+    // confirmation();
 }
-
-function addBasket(kanap){
-    let productInLocalStorage = getBasket(kanap);
-    let foundProduct = productInLocalStorage.find((kanap) => kanap._id === getId);
-    if (foundProduct != undefined){
-        foundProduct.quantite++;
-    }else{
-        kanap.quantite = 1;
-        productInLocalStorage.push(kanap);
-    }
-    addToLocalStorage(addBasket);
-}
-
-//Fenêtre pop-up de confirmation
-const quantite = document.getElementById('quantity');
-const confirmation = () => {
-    if (window.confirm('Votre commande est bien ajoutée au panier.')) {
-        window.location.href = "cart.html?id=" + getId;
-    }
-}
-//Ajout du produit au panier - gestion de l'évenement click
-    const bouton = document.getElementById('addToCart');
-    bouton.addEventListener("click", (event) => {
-        addToLocalStorage();
-        confirmation();
-    });
-    
-
-
-
- 
-// //Déclaration de la variable
-// //Récupération du panier
-
-// function addToLocalStorage(kanap) {   
-//     let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
-//     console.log(productInLocalStorage);                                 
-//     if(productInLocalStorage) {                  // S'il y a déjà un produit enregistré dans le panier, ajouter produits
-//     productInLocalStorage.push(kanap);
-//     localStorage.setItem('panier', JSON.stringify(productInLocalStorage));
-//     }else{                                      // S'il n'y a pas déjà de produit enregistré, envoyer array vide et ajouter produits
-//         productInLocalStorage = [];
-//         productInLocalStorage.push(kanap);
-//         localStorage.setItem('panier', JSON.stringify(productInLocalStorage)); 
-//         }
-        
-//     }
-//     addToLocalStorage (createOneKanapCard);
-// }
- 
-
-/*function loopForTotalQty(productInLocalStorage) {
-    let sumQty = 0;
-    if (productInLocalStorage === null) {
-          cart.innerText = `Panier`;
-    } else {
-          for (let productInLocalStorage of products) {
-                sumQty = sumQty + productInLocalStorage.quantite;
-          }
-          if (sumQty >= 1) {
-                cart = document.getElementById("cart");
-                cart.innerText = `Panier (${sumQty})`;
-          }
-    }
-}*/
+});

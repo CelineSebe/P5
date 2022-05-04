@@ -17,7 +17,7 @@ document.getElementById("order").addEventListener("click",function(){
     }
     if(valid){
         alert ("Votre commande a bien été prise en compte");
-        window.location.href = "confirmation.html?id=" + getId();
+        window.location.href = "confirmation.html?id=" + getId;
     }
 }
 );
