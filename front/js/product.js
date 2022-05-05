@@ -62,8 +62,9 @@ fetch('http://localhost:3000/api/products/' + getId())
  // La gestion du panier//
 
 const idForm = document.querySelector("#colors");
-const nameForm = document.querySelector("#title");
+const nameForm = document.getElementById("title");
 const quantityForm = document.getElementById("quantity");
+const image = document.querySelector(".item__img");
 
 // let idProduitSelectionne = products.find((kanap) => kanap._id === getId);
 // console.log(idProduitSelectionne);
@@ -89,9 +90,11 @@ const choixQuantity = quantityForm.value;
 // Stocker la récupération des valeurs du formulaire dans le localstorage
 let optionsProduit = {
     _id: getId(),
-    name: nameForm,
+    name: nameForm.str,
     colors: choixForm,
     quantite: choixQuantity,
+    imageUrl: image.src,
+    altTxt: image.alt,
 };
 console.log(optionsProduit);
 
@@ -111,3 +114,4 @@ if(productInLocalStorage){
     // confirmation();
 }
 });
+
