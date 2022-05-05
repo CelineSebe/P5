@@ -12,7 +12,7 @@ fetch("http://localhost:3000/api/products")
 //2ème promesse: obtenir dans le DOM les items avec Id
   .then(function(products) {
     for (kanap of products) {
-      let card = createKanapCard(kanap);
+      const card = createKanapCard(kanap);
       const items = document.getElementById('items');
       items.appendChild(card);
     }
@@ -24,17 +24,17 @@ fetch("http://localhost:3000/api/products")
   
 //Mise en place d'une fonction pour les cards
   function createKanapCard(kanap) {
-
+    //création des éléments dans le DOM//
       const a = document.createElement("a");
       const article = document.createElement("article");
       const image = document.createElement("img");
       const h3 = document.createElement("h3");
       const p = document.createElement("p");
 
-//Nouvelles classes ajoutées
+      //Nouvelles classes ajoutées
       h3.classList.add("productName");
       p.classList.add("productDescription");
-
+      //association clé-valeur de l'api//
       image.src = kanap.imageUrl;
       image.alt = kanap.altTxt;
       h3.innerHTML = kanap.name;
