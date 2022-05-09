@@ -6,7 +6,9 @@ fetch("http://localhost:3000/api/products")
   .then(function(res){
     if (res.ok){
       return res.json();
-  }
+    } else {
+      console.log('Mauvaise réponse du réseau');
+    }
 })
  
 //2ème promesse: obtenir dans le DOM les items avec Id
@@ -19,7 +21,8 @@ fetch("http://localhost:3000/api/products")
   })
 //Si l'API ne répond pas
   .catch(function (err) {
-    console.log(err);
+
+    console.log('Il y a eu un problème: fetch ' + error.message);
   });
   
 //Mise en place d'une fonction pour les cards
@@ -34,12 +37,12 @@ fetch("http://localhost:3000/api/products")
       //Nouvelles classes ajoutées
       h3.classList.add("productName");
       p.classList.add("productDescription");
-      //association clé-valeur de l'api//
+      //association clé-valeur de données de l'api//
       image.src = kanap.imageUrl;
       image.alt = kanap.altTxt;
       h3.innerHTML = kanap.name;
       p.innerHTML = kanap.description;
-      a.href = "product.html?id=" + kanap._id;
+      a.setAttribute("href", `./product.html?id=${kanap._id}`);
       
 //Ajouts des éléments du produit aux éléments parents
 //A l'aide propriété appendChild

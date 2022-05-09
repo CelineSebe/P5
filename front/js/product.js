@@ -14,19 +14,25 @@ fetch('http://localhost:3000/api/products/' + getId())
  .then((res) => { 
      if (res.ok) {
        return res.json();
-     }  
+
+    } else {
+        console.log('Mauvaise réponse du réseau');
+      }
      })
 
  // Deuxième promise
  .then(function getOneKanap (kanap) {
-    // let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
+    let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
     createOneKanapCard(kanap);
-    // addToLocalStorage(productInLocalStorage);
+    loopForColors(kanap);
+    addToLocal(productInLocalStorage);
     // getBasket();
     // addBasket(optionsProduit);
     //loopForTotalQty(productInLocalStorage);
-
  })
+ .catch(function(err) {
+    // console.log("Il y a eu un problème: avec l'opération fetch" + error.message);
+  });
  
  function createOneKanapCard(kanap) {
     const image = document.createElement('img');
@@ -40,22 +46,25 @@ fetch('http://localhost:3000/api/products/' + getId())
     itemsimg.appendChild(image);
 
     titrepage = kanap.name;
-    document.title = titrepage;
+    // document.title = titrepage;
     image.src = kanap.imageUrl;
     image.alt = kanap.altTxt;
     nomskanap.innerHTML = kanap.name;
     prix.innerHTML = kanap.price;
     description.innerHTML = kanap.description;
-    price = kanap.price;
-    console.log(kanap.price);
-    console.log(kanap);
+    
+ };
 //Loop pour afficher toutes les options couleurs dans le formulaire
-        for (let i = 0; i < kanap.colors.length; i++) {
-            const newOption = new Option(kanap.colors[i]);
-            newOption.value = kanap.colors[i];
-            select.options.add(newOption);
-        }
- }
+
+ function loopForColors(kanap) {
+    for (let i = 0; i < kanap.colors.length; i++){
+        const select = document.getElementById("colors");
+        const newOption = new Option(kanap.colors[i]);
+        newOption.value = kanap.colors[i];
+        select.options.add(newOption);
+    }
+
+ };
 
  //-----------------Localstorage---------------------------//
 
@@ -81,7 +90,6 @@ const confirmation = () => {
 btn_envoyerPanier.addEventListener("click", (e)=>{
     e.preventDefault();
     confirmation();
-   
         
     // Choix de l'option par l'utilisateur dans une variable
 const choixForm = idForm.value;
@@ -90,7 +98,7 @@ const choixQuantity = quantityForm.value;
 // Stocker la récupération des valeurs du formulaire dans le localstorage
 let optionsProduit = {
     _id: getId(),
-    name: nameForm.str,
+    name: nameForm,
     colors: choixForm,
     quantite: choixQuantity,
     imageUrl: image.src,
@@ -98,20 +106,24 @@ let optionsProduit = {
 };
 console.log(optionsProduit);
 
-
-
-let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
-console.log(productInLocalStorage);
-if(productInLocalStorage){
+//function ajout produit localstorage
+const addToLocalStorage = () => {
     productInLocalStorage.push(optionsProduit);
     localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
-    // confirmation();
+    // let productInLocalStorage = JSON.parse(localStorage.getItem('panier'));
+};
+
+//s'il y a des produits dans le localstorage
+if(productInLocalStorage){
+    confirmation();
+    addToLocalStorage();
+//s'il n'y ap de produits dans le localstorage
 }else{
     productInLocalStorage = [];
-    productInLocalStorage.push(optionsProduit);
-    localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
-    console.log(productInLocalStorage);
-    // confirmation();
+    confirmation();
+    addToLocalStorage();
 }
+
 });
+
 
