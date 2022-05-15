@@ -14,7 +14,7 @@ fetch("http://localhost:3000/api/products")
     productLocation.innerHTML = "Nous ne parvenons pas à afficher vos produits";
 })
  
-//2ème promesse: obtenir les données, dans le DOM avec Id
+//2ème promesse: créer les card produit, dans le DOM avec Id 
   .then(function(products) {
     // boucle pour obtenir chacun des produits
     for (kanap of products) {
@@ -27,6 +27,7 @@ fetch("http://localhost:3000/api/products")
 //Mise en place d'une fonction pour l'organisation de la card produit
   function createKanapCard(kanap) {
   //création des éléments dans le DOM//
+      const items = document.getElementById('items');
       const a = document.createElement("a");
       const article = document.createElement("article");
       const image = document.createElement("img");
@@ -41,7 +42,7 @@ fetch("http://localhost:3000/api/products")
       image.alt = kanap.altTxt;
       h3.innerHTML = kanap.name;
       p.innerHTML = kanap.description;
-      a.setAttribute("href", `./product.html?id=${kanap._id}`);
+      a.setAttribute("href", `product.html?id=${kanap._id}`);
       
 //Ajouts des éléments du produit aux éléments parents
 //Avec propriété appendChild
