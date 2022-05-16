@@ -4,10 +4,8 @@
 let params = new URL(location.href).searchParams;
 let id = params.get("id");
 
-getProduct();
-
 //Mise en place de l'Api en lien avec l'id du produit sélectionné
-async function getProduct() {
+const getProduct = async function () {
     await fetch(`http://localhost:3000/api/products/${id}`)
 
         // First Promise: on obtient la réponse sous forme JSON
@@ -44,7 +42,7 @@ async function getProduct() {
         //Loop pour afficher toutes les options couleurs dans le formulaire
 
             // function loopForColors(kanap) {
-                for (let i = 0; i < kanap.colors.length; i++){
+                for (let i = 0; i < kanap.colors.length; i+=1){
                     let option = kanap.colors[i];
                     choiceColor = document.createElement("option");
                     choiceColor.textContent = option;
@@ -55,8 +53,8 @@ async function getProduct() {
 
            
 /**************************-----------------Localstorage------------------------***********************/
-    add();
-    function add() {
+    
+    const add = function () {
        
          //Sélection du bouton ajouter l'article au panier
         let btnSendBasket = document.querySelector("#addToCart");
@@ -128,7 +126,9 @@ async function getProduct() {
             }
 
         })
-    }   
+    } 
+    add();  
 })
 }
+getProduct();
 
