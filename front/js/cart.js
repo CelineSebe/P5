@@ -92,6 +92,22 @@ deleteProd[i].addEventListener("click",(e) => {
   })
 }
 
+/************************ ------- Vider le panier ---------***************************************************************/
+const btn_deleteBasket_html = `
+<button class ="btn_supprimerPanier"> Vider le panier <button>`;
+
+//insertion du bouton dans le html
+document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
+const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
+
+  //suppression key "panier" pour vider LS
+  btn_deleteBasket.addEventListener('click', (e)=> {
+    e.preventDefault;
+
+    localStorage.removeItem("panier");
+    alert("le panier est vide") 
+    window.location.href = "cart.html"
+  })
 };
 // /***************** ------------ Fonction pour mettre à jour les quantités ----------- ***********************/
 // function changeQuantity() {
