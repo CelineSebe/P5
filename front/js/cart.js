@@ -80,10 +80,10 @@ for (let i =0; i < deleteProd.length; i++ ){
 deleteProd[i].addEventListener("click",(e) => {
   e.preventDefault();
   let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
-  let id_delete = productInLocalStorage[i]._id;
+  let color_delete = productInLocalStorage[i].color;
 
   //methode slice pour extraire une chaîne de caractère et la retourne comme une nouvelle chaîne de caractères
-  productInLocalStorage = productInLocalStorage.filter(element => element._id !== id_delete);
+  productInLocalStorage = productInLocalStorage.filter(element => element.color !== color_delete);
   console.log(productInLocalStorage);
   // envoi de la variable LS
   localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
