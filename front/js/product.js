@@ -19,11 +19,8 @@ const getProduct = async function () {
 
         // Deuxième promise: fonction afficher le produit et les options associés
         .then(function (api){
-            //  let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
             let kanap = api;
-            // createOneKanapCard(kanap);
-            // loopForColors(kanap);
-            // add();
+    
             const image = document.createElement('img');
             const items = document.querySelector('.item__img')
             items.appendChild(image);
@@ -49,9 +46,7 @@ const getProduct = async function () {
                     choiceColor.value = option;
                     select.appendChild(choiceColor);
                     }
-            // }
 
-           
 /**************************-----------------Localstorage------------------------***********************/
     
     const add = function () {

@@ -12,6 +12,7 @@ let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
     .then(function createBasket() {
         getBasket();
         deleteProduct();
+        costTotal();
     })    
     // Si l'API ne répond pas
     // .catch(function(err) {
@@ -27,7 +28,7 @@ function getBasket(){
     if (productInLocalStorage === null || productInLocalStorage.length === 0) {
       positionProduct.innerHTML = "Votre panier est vide";
       const voirAccueil = document.createElement("p");
-      voirAccueil.innerText = "Vous pouvez trouver notre gamme d'articles sur l'accueil :)";
+      voirAccueil.innerText = "Vous pouvez retrouver notre gamme d'articles à l'accueil :)";
       positionProduct.appendChild(voirAccueil);
       positionProduct.style.fontSize = "20px";
       positionProduct.style.textAlign = "center"; 
@@ -50,7 +51,7 @@ function getBasket(){
                 </div>
                 <div class="cart__item__content__settings">
                   <div class="cart__item__content__settings__quantity">
-                    <p>Qté :${productInLocalStorage[j].quantity} </p>
+                    <p>Qté : </p>
                     <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInLocalStorage[j].quantity}">
                   </div>
                   <div class="cart__item__content__settings__delete">
@@ -69,20 +70,21 @@ function getBasket(){
       }
     }
 getBasket();
+
 /***************** ------------ Supprimer l'article ---------************************************************/
 deleteProduct();
 
 function deleteProduct(){
 const deleteProd = document.querySelectorAll(".deleteItem");
 
-// selection de l'ID supprimé en cliquant sur le bouton
+// selection du produit supprimé en cliquant sur le texte "supprimer"
 for (let i =0; i < deleteProd.length; i++ ){
 deleteProd[i].addEventListener("click",(e) => {
   e.preventDefault();
-  let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
+  // let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
   let color_delete = productInLocalStorage[i].color;
 
-  //methode slice pour extraire une chaîne de caractère et la retourne comme une nouvelle chaîne de caractères
+  //methode filter pour ne pas sortir de la variable les élements qui ont une couleur différente
   productInLocalStorage = productInLocalStorage.filter(element => element.color !== color_delete);
   console.log(productInLocalStorage);
   // envoi de la variable LS
@@ -94,57 +96,60 @@ deleteProd[i].addEventListener("click",(e) => {
 
 /************************ ------- Vider le panier ---------***************************************************************/
 const btn_deleteBasket_html = `
-<button class ="btn_supprimerPanier"> Vider le panier <button>`;
+<button class ="btn_supprimerPanier"> Vider le panier </button>`;
 
 //insertion du bouton dans le html
 document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
 const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
-
+btn_deleteBasket.style.width= "100%";
+if (productInLocalStorage == null || productInLocalStorage == undefined){
+  btn_deleteBasket.style.display ="none";
+}
   //suppression key "panier" pour vider LS
   btn_deleteBasket.addEventListener('click', (e)=> {
-    e.preventDefault;
-
+    e.preventDefault();
     localStorage.removeItem("panier");
-    alert("le panier est vide") 
-    window.location.href = "cart.html"
+    alert("Le panier est désormais vide") 
+    window.location.href = "cart.html" 
   })
 };
-// /***************** ------------ Fonction pour mettre à jour les quantités ----------- ***********************/
-// function changeQuantity() {
-//   const positionProduct = document.getElementById("cart__items");
-//   // manière de regarder ce que l'on a d'affiché dynamiquement grace au dataset
-//   // On écoute ce qu'il se passe dans itemQuantity de l'article concerné
-//   positionProduct.forEach((positionProduct) => {
-//     positionProduct.addEventListener("change", (eq) => {
-//       // vérification d'information de la valeur du clic et son positionnement dans les articles
-      
-//           totalProduit();
-//         });
-//     });
-//   };
+
+  /******************** ------------ Fonction pour calculer le prix total ----------------************************/
+  function costTotal (){
+    let costProducts = [];
+    
+    for(let i = 0; i < productInLocalStorage.length; i++){
+      let priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
+      costProducts.push(priceBasket);
+      console.log(priceBasket);
+    }
+  
+  /******************** -------------  Calcul du nombre d'articles ----------************************/
+  
+    let countTot = [];
+    for(let j= 0; j < productInLocalStorage.length; j++){
+      let quantityBasket = productInLocalStorage[j].quantity;
+      countTot.push(quantityBasket);
+      console.log(countTot);
+    }
+    let sumQuantityBasket = countTot.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const totalQuantity = document.getElementById("totalQuantity");
+    console.log(sumQuantityBasket);
+        if(sumQuantityBasket > 1){
+          totalQuantity.insertAdjacentHTML("beforeend", sumQuantityBasket + " " + "articles");
+        }else{
+          totalQuantity.textContent = "1 article";
+        };
+
+  /********************** ------------ Calcul du prix total de la commande ---************************/
+  
+  let sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const totalPrice = document.getElementById("totalPrice");
+    totalPrice.innerHTML = sumPriceBasket;
+
+  };
 
 
-// /*****-------- fonction ajout nombre total produit et coût total ------*********/
-
-// function totalProduit() {
-//   let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
-//   // déclaration variable en tant que nombre
-//   let totalArticle = 0;
-//   // déclaration variable en tant que nombre
-//   let prixCombiné = 0;
-//   // déclaration variable en tant que nombre
-//   let totalPrix = 0;
-//   // j'ajoute toutes les quantités d'article du panier et calcule la somme/prix total
-//   for (let article of productInLocalStorage) {
-//     totalArticle += JSON.parse(article.quantité);
-//     prixCombiné = JSON.parse(article.quantité) * JSON.parse(article.prix);
-//     totalPrix += prixCombiné;
-//   }
-//   // je pointe l'endroit d'affichage nombre d'article
-//   document.getElementById("totalQuantity").textContent = totalArticle;
-//   // je pointe l'endroit d'affichage du prix total
-//   document.getElementById("totalPrice").textContent = totalPrix;
-// }
 // Ecoute la validation de la commande lors de l'envoi du formulaire
 document.getElementById("order").addEventListener("click",function(){
     //champs à compléter
@@ -157,9 +162,8 @@ document.getElementById("order").addEventListener("click",function(){
         }
     }
     if(valid){
-        alert ("Votre commande a bien été prise en compte");
         if (window.confirm('Votre commande a bien été ajoutée au panier.')){
-        window.location.href = "confirmation.html" ;
+        window.location.href = "confirmation.html" + _id ;
         }
     }
 })
