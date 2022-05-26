@@ -1,5 +1,5 @@
 
-//Récupérer l'id dans un lien grâce aux variables params
+//Récupérer l'URL de l'API et l'id grâce aux variables params et id
 
 let params = new URL(location.href).searchParams;
 let id = params.get("id");
@@ -86,6 +86,7 @@ const getProduct = async function () {
                     _id: id,
                     name: kanap.name,     
                     image: kanap.imageUrl,
+                    price: kanap.price,
                     };
 
 
