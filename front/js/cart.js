@@ -13,6 +13,7 @@ let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
         getBasket();
         deleteProduct();
         costTotal();
+        maj_produit();
     })    
     // Si l'API ne répond pas
     // .catch(function(err) {
@@ -141,15 +142,57 @@ if (productInLocalStorage == null || productInLocalStorage == undefined){
           totalQuantity.textContent = "1 article";
         };
 
-  /********************** ------------ Calcul du prix total de la commande ---************************/
+  /******************** ------------ Calcul du prix total de la commande ---************************/
   
   let sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     const totalPrice = document.getElementById("totalPrice");
     totalPrice.innerHTML = sumPriceBasket;
-
   };
+/********************* ------------- Créer les écouteurs pour les input quantity -------************/
 
-
+// function maj_produit(){
+//   if (productInLocalStorage){
+//   let itemQuantity = document.querySelectorAll(".itemQuantity");
+//                     itemQuantity.forEach(element => {  
+//                         element.addEventListener('change', function (changeInput) 
+//                         {
+//                           id = element.dataset.idElement;
+//                           color = element.dataset.color;
+//                           quantity = parseInt(element.ariaValueMax,10);
+//                           // Creer la même boucle que la maj de l'ajout au panier
+//                           // let foundElement = []; 
+//                           // On crée une boucle forEach dans le panier pour chercher dans chaque élément 
+//                           productInLocalStorage.forEach(element => {
+//                               // on crée une condition si on a le même id et même couleur que les éléments du panier
+//                               if (id == element._id && color == element.color) {
+//                                   // on stocke l'élément dans la variable foundElement
+//                                   foundElement = element;
+//                                   }
+//                                 });
+//                           // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne
+//                           if (foundElement != null) {
+//                             foundElement.quantity = quantity;
+//                             console.log(foundElement);
+//                         }else { 
+//                             // sinon on push le panier dans le LS
+//                             productInLocalStorage.push(product);
+//                             console.log(productInLocalStorage);
+//                         }
+//                         // on envoie les éléments du panier dans le LS
+//                         localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
+//                         totalQuantity.innerText = foundElement.quantity;
+//                             }
+//                     )}
+//             )};
+//         }
+//         maj_total();
+//         if (productInLocalStorage)
+//         // Gestion des qtés et du prix total
+//         let priceTotal = 0;
+//         let quantityTotal = 0;
+//         panier.forEach(element => {
+//             quantityTotal += element.quantity;
+//         });
 // Ecoute la validation de la commande lors de l'envoi du formulaire
 document.getElementById("order").addEventListener("click",function(){
     //champs à compléter
@@ -162,7 +205,7 @@ document.getElementById("order").addEventListener("click",function(){
         }
     }
     if(valid){
-        if (window.confirm('Votre commande a bien été ajoutée au panier.')){
+        if (window.confirm('Votre commande a bien été prise en compte')){
         window.location.href = "confirmation.html" + _id ;
         }
     }
