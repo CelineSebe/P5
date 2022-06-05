@@ -13,8 +13,9 @@ let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
         getBasket();
         deleteProduct();
         costTotal();
-        changeQty();
-        // maj_produit();
+        add();
+        // maj_total();
+
     })    
     // Si l'API ne répond pas
     // .catch(function(err) {
@@ -29,8 +30,8 @@ function getBasket(){
       //si le localstorage est vide
     if (productInLocalStorage === null || productInLocalStorage.length === 0) {
       positionProduct.innerHTML = "Votre panier est vide";
-      const voirAccueil = document.createElement("p");
-      voirAccueil.innerText = "Vous pouvez retrouver notre gamme d'articles à l'accueil :)";
+      const returnHome = document.createElement("p");
+      returnHome.innerText = "Vous pouvez retrouver notre gamme d'articles à l'accueil :)";
       positionProduct.appendChild(voirAccueil);
       positionProduct.style.fontSize = "20px";
       positionProduct.style.textAlign = "center"; 
@@ -101,12 +102,12 @@ const btn_deleteBasket_html = `
 <button class ="btn_supprimerPanier"> Vider le panier </button>`;
 
 //insertion du bouton dans le html
-document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
-const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
-btn_deleteBasket.style.width= "100%";
-if (productInLocalStorage == null || productInLocalStorage == undefined){
-  btn_deleteBasket.style.display ="none";
-}
+  document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
+    const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
+    btn_deleteBasket.style.width= "100%";
+      if (productInLocalStorage == null || productInLocalStorage == undefined){
+        btn_deleteBasket.style.display ="none";
+      }
   //suppression key "panier" pour vider LS
   btn_deleteBasket.addEventListener('click', (e)=> {
     e.preventDefault();
@@ -116,74 +117,134 @@ if (productInLocalStorage == null || productInLocalStorage == undefined){
   })
 };
 
-  /******************** ------------ Fonction pour calculer le prix total ----------------************************/
-  function costTotal (){
-    let costProducts = [];
+ /******************** ------------ Fonction pour calculer le prix total ----------------************************/
+ function costTotal (){
+
+    /******************** -------------  Calcul du nombre d'articles ----------************************/
+
+  let countTot = [];
+  for(let j= 0; j < productInLocalStorage.length; j++){
+    let quantityBasket = productInLocalStorage[j].quantity;
+    countTot.push(quantityBasket);
+    console.log("youyou",countTot);
+  }
+  let sumQuantityBasket = countTot.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  let totalQuantity = document.getElementById("totalQuantity");
+  console.log(sumQuantityBasket);
+      if(sumQuantityBasket > 1){
+        totalQuantity.insertAdjacentHTML("beforeend", sumQuantityBasket + " " + "articles");
+        // add();
+      }else if (sumQuantityBasket <= 1){
+        totalQuantity.textContent = sumQuantityBasket + " " + "article";
+      };
     
-    for(let i = 0; i < productInLocalStorage.length; i++){
-      let priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
-      costProducts.push(priceBasket);
-      console.log(priceBasket);
-    }
-  
-  /******************** -------------  Calcul du nombre d'articles ----------************************/
-  
-    let countTot = [];
-    for(let j= 0; j < productInLocalStorage.length; j++){
-      let quantityBasket = productInLocalStorage[j].quantity;
-      countTot.push(quantityBasket);
-      console.log(countTot);
-    }
-    let sumQuantityBasket = countTot.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    const totalQuantity = document.getElementById("totalQuantity");
-    console.log(sumQuantityBasket);
-        if(sumQuantityBasket > 1){
-          totalQuantity.insertAdjacentHTML("beforeend", sumQuantityBasket + " " + "articles");
-        }else{
-          totalQuantity.textContent = "1 article";
-        };
 
-  /******************** ------------ Calcul du prix total de la commande ---************************/
+/******************** ------------ Calcul du prix total de la commande ---************************/
+let costProducts = [];
   
-  let sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    const totalPrice = document.getElementById("totalPrice");
-    totalPrice.innerHTML = sumPriceBasket;
-  };
+  for(let i = 0; i < productInLocalStorage.length; i++){
+    let priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
+    costProducts.push(priceBasket);
+    console.log(priceBasket);
+  }
 
-  /***************** ------------ Modifier la quantité du produit ----------***********************************/
-  
-function changeQty()
-{
+let sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const totalPrice = document.getElementById("totalPrice");
+  totalPrice.innerHTML = sumPriceBasket;
 
+  add();
+};
+
+/***************** ------------ Modifier la quantité du produit ----------***********************************/
+
+function add ()
+  {
+  if(productInLocalStorage){
   // Sélectionner l'input
-  let inputQuantity = document.querySelectorAll(".itemQuantity");
-        
-  let totalQuantity = document.querySelector("#totalQuantity");
-  let quantity = parseInt(inputQuantity.value, 10);
-  console.log("valeur",inputQuantity);
-  //On écoute l'élément 
-  // quantity.forEach (element => 
-  // {
-    inputQuantity.addEventListener("change", (e) => {
-        // e.preventDefault();
-        id = element.dataset.id;
-        color = element.dataset.color;
-        quantity = (parseInt(element.value, 10));
+  let inputQuantity = document.querySelectorAll(".itemQuantity");      
+  let totalQuantity = document.getElementById("totalQuantity");
+  // //On écoute l'élément 
+  inputQuantity.forEach(element => {
+        element.addEventListener("change", (e) => 
+    {
+       id = element._id;
+       color = element.color;
+       quantity = (parseInt(element.value, 10));
 
-        // créer boucle d'ajout au localstorage
-        productInLocalStorage.forEach(element => {
-          //créer une condition si, même id et même couleur que les éléments du panier
-          if (id == element._id && color == element.color) {
+// récupération du panier de produit LS
+let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
+                
+let foundElement = [];
+    // créer boucle d'ajout au localstorage
+    inputQuantity.forEach(element => {
+    console.log("valeur",inputQuantity);
+
+      //créer une condition si, même id et même couleur que les éléments du panier
+      if (id == element._id && color == element.color) {
             //stockage de l'élément dans une variable
             foundElement = element;
+            // let foundIndex = productInLocalStorage.findIndex((element) => id === element.id && element.color === color);
+            // productInLocalStorage[foundIndex].quantity = inputQuantity.valueAsNumber;
+              }
+          });
+  // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne
+      if (foundElement != null) {
+            foundElement.quantity = quantity + foundElement.quantity;
+            console.log(foundElement);
+      }else { 
+            // sinon on push le panier dans le LS
+            productInLocalStorage.push();
+            console.log(productInLocalStorage);
           }
-          // });
           // Stocker la récupération des valeurs de l'input dans le localstorage
+
           localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
-          totalQuantity.innerText = foundElement.quantity;
+          totalQuantity.innerText  = foundElement.quantity + " " + "articles";
+          maj_total();
         });
       })
-// })
+    }
+}
+maj_total();// une fois les écouteurs créés, on calcule une première fois le total
+
+
+/** FONCTION QUI SERT A METTRE A JOUR LE TOTAL */
+            // on l'appelle à chaque modification dans un écouteur
+            function maj_total ()
+            {
+              let totalQuantity = document.getElementById("totalQuantity");
+              let totalPrice = document.getElementById("totalPrice");  
+              if (productInLocalStorage) 
+                {               
+                    // Gestion des qtés et du prix total
+                    let totalPrice = 0;
+                    let totalQuantity = 0;
+                    productInLocalStorage.forEach(element => {
+                        totalQuantity+= element.quantity;  
+                        totalPrice += element.price * element.quantity;
+                        totalQuantity.innerHTML = parseInt(totalQuantity) + productInLocalStorage.quantity;
+                        totalPrice.innerText = parseInt(totalPrice) + productInLocalStorage.price * productInLocalStorage.quantity; 
+                    })           
+                }
+            }
+  
+
+  //   function totalArticle() {
+
+
+  //     //**Total quantité**/
+     
+  //     let totalQuantity = document.getElementById('totalQuantity');
+  //     totalQuantity.innerHTML = parseInt(totalQuantity) + productInLocalStorage.quantity;
+  
+      
+  
+  //     /**Total Prix**/
+  
+  //     let totalPrice = document.getElementById('totalPrice'); 
+  //     totalPrice.innerHTML = parseInt(totalPrice) + product.price * productStorage.quantity;
+  // }
+  // totalArticle();
 
 // Ecoute la validation de la commande lors de l'envoi du formulaire
 document.getElementById("order").addEventListener("click",function(){
@@ -202,4 +263,19 @@ document.getElementById("order").addEventListener("click",function(){
         }
     }
 })
-}
+
+/*******--------- Fonction pour maj le total ---------- ************************/
+
+//  function maj_total ()
+//  {
+//    if(productInLocalStorage){
+//      let totalPrice = 0;
+//      let totalQuantity = 0;
+//      productInLocalStorage.forEach(element => {
+//        totalQuantity += element.quantity;
+//        totalPrice += element.price;
+//      });
+
+//    }
+ 
+
