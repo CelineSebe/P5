@@ -10,12 +10,15 @@ const getProduct = async function () {
 
         // First Promise: on obtient la réponse sous forme JSON
         .then(function(response) { 
+            if(response.ok){
             return response.json();
+            }
         })
         .catch(function(err) {
         let productLocation = document.querySelector(".item");
         productLocation.innerHTML = "Nous ne parvenons pas à afficher votre produit";
-        })
+        localStorage.clear();
+    })
 
         // Deuxième promise: fonction afficher le produit et les options associés
         .then(function (api){
@@ -57,8 +60,8 @@ const getProduct = async function () {
         // Ecouter le bouton et l'envoyer au panier dans le local storage
         btnSendBasket.addEventListener('click', (e) => {
             e.preventDefault();
-            let choiceColor = (document.querySelector("#colors").selectedOptions[0].value);
-            let choixQuantity = parseInt(document.querySelector("#quantity").value, 10);
+            let choiceColor = document.querySelector("#colors").selectedOptions[0].value;
+            let choixQuantity = parseInt( document.querySelector("#quantity").value,10);
 
 /****************************** ----------- OLD METHODE -------------  *********************************/
             // const confirmation = () => {
@@ -77,12 +80,12 @@ const getProduct = async function () {
             {
                 let optionsProduit = {
                     color: choiceColor,
-                    quantity: parseInt(choixQuantity,10),
+                    quantity: choixQuantity,
                     _id: id,
                     name: kanap.name,     
                     image: kanap.imageUrl,
                     price: kanap.price,
-                    };
+                 };
 
 
                     addToCart.innerText = `Ajouté !`;
@@ -91,16 +94,16 @@ const getProduct = async function () {
                     }, 4000);
 
                 // récupération du panier de produit LS
-                let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
+                let products = JSON.parse(localStorage.getItem("panier"));
                 
                 // si le local storage est vide, on récupère un array vide
-                if (productInLocalStorage == null){
-                        productInLocalStorage = [];
+                if (products == null ){
+                        products = [];
                 }
 
                 let foundElement = null;
                 // Création d'une boucle forEach
-                productInLocalStorage.forEach(element => {
+                products.forEach(element => {
 
                     //Condition si on a le même id et color dans LS qu'un élément du panier
                     if (id == element._id && choiceColor == element.color){
@@ -113,11 +116,11 @@ const getProduct = async function () {
                         foundElement.quantity = foundElement.quantity + choixQuantity;
                     //sinon on ajoute une ligne au panier dans LS
                     }else{
-                        productInLocalStorage.push(optionsProduit);
+                        products.push(optionsProduit);
                     } 
                 
                 //envoie du panier au LS
-                localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
+                localStorage.setItem("panier", JSON.stringify(products));
                 
             }
 
