@@ -1,7 +1,7 @@
 
 // Récupération du panier de produit LS
 let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
-
+displayBasket();
 //Mise en place de l'Api
 
  fetch('http://localhost:3000/api/products/')
@@ -10,21 +10,22 @@ let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
         return response.json();
       }
     })
-     //2ème promesse: obtenir l'objet JS
-    .then((data) => {
-      // Récupération du panier de produit LS
-let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
-        displayBasket(productInLocalStorage, data);
-        
-    })
-
     // Si l'API ne répond pas
     .catch(function(err) {
-     const empty = document.querySelector("#items");
-     empty.innerHTML = "<h1>Lepanier est vide</h1>";
-     const inaccessible = document.createElement("p");
-     inaccessible.innerHTML = "Toutes nos excuses, la base de données est inaccessible, revenir plus tard";
-     empty.appendChild(inaccessible);
+      const empty = document.querySelector("#cart__items");
+      empty.innerHTML = "";
+      const inaccessible = document.createElement("p");
+      inaccessible.innerHTML = "Toutes nos excuses, la base de données est inaccessible, revenir plus tard";
+      inaccessible.style.fontSize = "20px";
+      inaccessible.style.textAlign ="center";
+      empty.appendChild(inaccessible);
+     })
+
+     //2ème promesse: obtenir l'
+    .then((data) => {
+      // Récupération du prix produit LS
+        let kanap = data;
+        return kanap.price; 
     });
 
 /*******------------- Affichage du panier - Fonction pour l'affichage du panier -------------*****************/
@@ -322,122 +323,178 @@ function changeBasket ()
 
 // //**Formulaire**/
 
-// function formulaire() {
-//   let form = document.querySelector('.cart__order__form')
-//   const NameRegex = new RegExp("^[a-zA-Z  -]+$");
-//   const AddressRegex = new RegExp("^[0-9a-zA-Z -,]+$");
-//   const EmailRegex = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+$")
+function formulaire () {
+
+  // Selection du bloc HTML formulaire
+let form = document.querySelector(".cart__order__form");
+
+  // Assignation des RegExp pour chaque type de saisie possible
+
+  //Ecoute de la modification des input du formulaire
+form.firstName.addEventListener('change', function(){
+  TextRegex(this);
+});
+
+form.lastName.addEventListener('change', function(){
+  TextRegex(this);
+});
+
+form.address.addEventListener('change', function(){
+  AddressRegex(this);
+});
+
+form.city.addEventListener('change', function(){
+  AddressRegex(this);
+});
+
+form.email.addEventListener('change', function(){
+  EmailRegex(this);
+});
+
+  //Fonctions pour valider le formulaire sous condition
+  //pour valider le texte
+const TextRegex = function(inputText){
+
+  let Regexp = new RegExp('^[a-z.\'\s éêèàëÉÈÊË\-]{1,25}$', 'gi');
+  //Récupérer le p sous l'input
+  let textMsg = inputText.nextElementSibling;
   
-//   form.firstName.addEventListener('change', () => {
-//       valideFirstNameRegex(this);
-//   })
-//   form.lastName.addEventListener('change', () => {
-//       valideLastNameRegex(this);
-//   })
-//   form.address.addEventListener('change', () => {
-//       valideAddressRegex(this);
-//   })
-//   form.city.addEventListener('change', () => {
-//       valideCityRegex(this);
+  //Si FALSE, on définit un message
+  if(Regexp.test(inputText.value) === false){
+      if(textMsg != null)
+      {
+        textMsg.innerHTML = "Saisie invalide";
+        textMsg.innerHTML.color = "red";
+        // inputText.innerHTML.backgroundcolor = "red";
+      }
+      return false;
+  }else{
+      if (textMsg != null)
+      {
+        inputText.innerHTML.backgroundcolor = "green";
+      }
+      return true;
+  }
+
+  }
+
+  const AddressRegex = function(inputAddress){
+
+    let Regexp = new RegExp('^[a-zA-ZéêèàëÉÈÊË0-9.,-\s ]{2,90}$', 'g');
+    //Récupérer le p sous l'input
+    let adressMsg = inputAddress.nextElementSibling;
+    
+    //Si FALSE, on définit un message
+    if(Regexp.test(inputAddress.value) === false){
+        if(adressMsg != null)
+        {
+          textMsg.innerHTML = "Saisie invalide";
+          textMsg.innerHTML.color = "red";
+          // inputAddress.innerHTML.backgroundcolor = "red";
+        }
+        return false;
+    }else{
+        if (adressMsg != null)
+        {
+          inputAddress.innerHTML.backgroundcolor = "green";
+        }
+        return true;
+    }
+  
+    }
+
+    const EmailRegex = function(inputEmail){
+
+      let Regexp = new RegExp('^[a-zA-ZéêèàëÉÈÊË0-9.,-\s ]{2,90}$', 'g');
+      //Récupérer le p sous l'input
+      let emailMsg = inputEmail.nextElementSibling;
       
-//   })
-//   form.email.addEventListener('change', () => {
-//       valideEmailRegex(this);
-//   })
+      //Si FALSE, on définit un message
+      if(Regexp.test(inputEmail.value) === false){
+          if(emailMsg != null)
+          {
+            textMsg.innerHTML = "Saisie invalide";
+            textMsg.innerHTML.color = "red";
+            // inputEmail.innerHTML.backgroundcolor = "red";
+          }
+          return false;
+      }else{
+          if (emailMsg != null)
+          {
+            inputEmail.innerHTML.backgroundcolor = "green";
+          }
+          return true;
+      }
+    
+    };
 
-//   const valideFirstNameRegex = function () {
-//       let firstNameErrorMsg = document.getElementById('firstName').nextElementSibling;
+    let commandBtn = document.querySelector(".cart__order__form__submit");
 
-//       if (NameRegex.test(form.firstName.value)) {
-//           firstNameErrorMsg.innerHTML = '';
-//           console.log("OK");
+    commandBtn.addEventListener("click", function(e){
+      e.preventDefault();
 
-//       } else {
-//           firstNameErrorMsg.innerHTML = 'Saisie invalide';
-//           console.log('not ok');
-//       }
-//   }
-
-//    const valideLastNameRegex = function () {
-//       let lastNameErrorMsg = document.getElementById('lastName').nextElementSibling;
-
-//       if (NameRegex.test(form.lastName.value)) {
-//           lastNameErrorMsg.innerHTML = '';
-//           console.log("OK");
-
-//       } else {
-//           lastNameErrorMsg.innerHTML = 'Saisie invalide';
-//           console.log('not ok');
-//       }
-//   }
-
-//    const valideAddressRegex = function () {
-//       let addressErrorMsg = document.getElementById('address').nextElementSibling;
-
-//       if (AddressRegex.test(form.address.value)) {
-//           addressErrorMsg.innerHTML = '';
-//           console.log("OK");
-
-//       } else {
-//           addressErrorMsg.innerHTML = 'Saisie invalide';
-//           console.log('not ok');
-//       }
-//   }
-
-//       const valideCityRegex = function () {
-//       let cityErrorMsg = document.getElementById('city').nextElementSibling;
-
-//       if (NameRegex.test(form.city.value)) {
-//           cityErrorMsg.innerHTML = '';
-//           console.log("OK");
-
-//       } else {
-//           cityErrorMsg.innerHTML = 'Saisie invalide';
-//           console.log('not ok');
-//       }
-//   }
-
-
-//        const  valideEmailRegex = function () {
-//       let emailErrorMsg = document.getElementById('email').nextElementSibling;
-
-//       if (EmailRegex.test(form.email.value)) {
-//           emailErrorMsg.innerHTML = '';
-//           console.log("OK");
-
-//       } else {
-//           emailErrorMsg.innerHTML = 'Saisie invalide';
-//           console.log('not ok');
-//       }
-//   }
-
-// }
-
-// formulaire();
-//  CONDITIONS POUR VALIDER LA COMMANDE
-  
-  //   const sendOrder = async function () {
-  //     const options = {
-  //         method: "POST",
-  //         body: JSON.stringify(order),
-  //         headers: {
-  //             'Accept': 'application/json',
-  //             "Content-Type": "application/json"
-  //         },
-  //     }
-  //     fetch("http://localhost:3000/api/products/order", options)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //         console.log(data);
-  //         localStorage.clear();
-  //         localStorage.setItem("orderID", data.orderId);
-  //         window.location.href = 'confirmation.html?id='+ data.orderId;
-  //     })
-  //     .catch((err) => console.log('Erreur : ' +err));
-  // }
-
-  // sendOrder(order);
+        //Conditions de validation
+        let form = document.querySelector(".cart__order__form");
+        if (TextRegex (form.firstName) 
+        && TextRegex(form.lastName) 
+        && TextRegex(form.city) 
+        && AddressRegex(adress) 
+        && EmailRegex(email))
+        {
         
+          let result = true;
+          let itemQuantity = document.querySelectorAll(".itemQuantity");
+          itemQuantity.forEach(element => {
+              if (element.value < 1 || element.value > 100) {
+                  result = false;
+              }
+          });
+          console.log(result);
+          if (result) {
+          
+              let contacts = {
+                  firstName : document.querySelector("#firstName").value,
+                  lastName : document.querySelector("#lastName").value,
+                  address : document.querySelector("#address").value,
+                  city : document.querySelector("#city").value,
+                  email : document.querySelector("#email").value,
+              }
+              console.log(contacts);
+              let cart = [];
+              for (cart of productInLocalStorage) {
+                  products.push(cart._id);
+              }
+              console.log(cart);
+              let order = {
+                  contact: contacts,
+                  products: products,
+              }
+              const sendOrder = async function () {
+                const options = {
+                    method: "POST",
+                    body: JSON.stringify(order),
+                    headers: {
+                        'Accept': 'application/json',
+                        "Content-Type": "application/json"
+                    },
+                }
+                fetch("http://localhost:3000/api/products/order", options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    localStorage.clear();
+                    localStorage.setItem("orderID", data.orderId);
+                    window.location.href = 'confirmation.html?id='+ data.orderId;
+                })
+                .catch((err) => console.log('Erreur : ' +err));
+            }
+            sendOrder(order);
+          }
+      }
+  })   
+}
+
+formulaire();       
 
 /*******--------- Old method maj le total ---------- ************************/
 
