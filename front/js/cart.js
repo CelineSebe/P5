@@ -251,7 +251,7 @@ costTotal();
 function changeBasket ()
   {
     
-      // Sélectionner l'input
+    //  Sélectionner l'input
     let itemQuantity = document.querySelectorAll(".itemQuantity");
     let totalQuantity = document.getElementById("totalQuantity");
     
@@ -295,15 +295,16 @@ function changeBasket ()
         })
           
         //créer une condition si, même id et même couleur que les éléments du panier
-    
-        localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
-          
-        alert("Ce produit a bien été modifié");
-
+        if (quantity > 0 && quantity< 100){
+            localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
+              
+            alert("Ce produit a bien été modifié");
+        }
         location.reload(true);         
            })
           })
   }
+        
 
   let deleteItem = document.querySelectorAll(".deleteItem");
                     deleteItem.forEach(element =>{
@@ -319,6 +320,7 @@ function changeBasket ()
                         })
                   })
             }
+          
  changeBasket();
 
 // //**Formulaire**/
