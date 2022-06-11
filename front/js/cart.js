@@ -388,8 +388,8 @@ const TextRegex = function(inputText){
     if(Regexp.test(inputAddress.value) === false){
         if(adressMsg != null)
         {
-          textMsg.innerHTML = "Saisie invalide";
-          textMsg.innerHTML.color = "red";
+          adressMsg.innerHTML = "Saisie invalide";
+          adressMsg.innerHTML.color = "red";
           // inputAddress.innerHTML.backgroundcolor = "red";
         }
         return false;
@@ -413,9 +413,8 @@ const TextRegex = function(inputText){
       if(Regexp.test(inputEmail.value) === false){
           if(emailMsg != null)
           {
-            textMsg.innerHTML = "Saisie invalide";
-            textMsg.innerHTML.color = "red";
-            // inputEmail.innerHTML.backgroundcolor = "red";
+            emailMsg.innerHTML = "Saisie invalide";
+            emailMsg.innerHTML.color = "red";
           }
           return false;
       }else{
@@ -438,7 +437,7 @@ const TextRegex = function(inputText){
         if (TextRegex (form.firstName) 
         && TextRegex(form.lastName) 
         && TextRegex(form.city) 
-        && AddressRegex(adress) 
+        && AddressRegex(address) 
         && EmailRegex(email))
         {
         
@@ -460,14 +459,14 @@ const TextRegex = function(inputText){
                   email : document.querySelector("#email").value,
               }
               console.log(contacts);
-              let cart = [];
+              let kanap = [];
               for (cart of productInLocalStorage) {
-                  products.push(cart._id);
+                  kanap.push(kanap._id);
               }
-              console.log(cart);
+              console.log(kanap);
               let order = {
                   contact: contacts,
-                  products: products,
+                  kanap: kanap,
               }
               const sendOrder = async function () {
                 const options = {
@@ -496,34 +495,22 @@ const TextRegex = function(inputText){
 
 formulaire();       
 
-/*******--------- Old method maj le total ---------- ************************/
-
-//  function maj_total ()
-//  {
-//    if(productInLocalStorage){
-//      let totalPrice = 0;
-//      let totalQuantity = 0;
-//      productInLocalStorage.forEach(element => {
-//        totalQuantity += element.quantity;
-//        totalPrice += element.price;
-//      });
- 
 /***********************-------- Old Method -------- *********************/
 // Ecoute la validation de la commande lors de l'envoi du formulaire
-document.getElementById("order").addEventListener("click",function(){
-//     //champs à compléter
+// document.getElementById("order").addEventListener("click",function(){
+// //     //champs à compléter
 
-    var valid = true;
-    for(let input of document.querySelectorAll(".form")){
-        valid = valid && input.reportValidity();
-        if(!valid){
-            break;
-        }
-    }
-    if(valid){
-        if (window.confirm('Votre commande a bien été prise en compte')){
-        window.location.href = "confirmation.html" ;
-          }
-        }
-      })
+//     var valid = true;
+//     for(let input of document.querySelectorAll(".form")){
+//         valid = valid && input.reportValidity();
+//         if(!valid){
+//             break;
+//         }
+//     }
+//     if(valid){
+//         if (window.confirm('Votre commande a bien été prise en compte')){
+//         window.location.href = "confirmation.html" ;
+//           }
+//         }
+//       })
     } 
