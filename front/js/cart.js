@@ -11,23 +11,24 @@ let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
       }
     })
      //2ème promesse: obtenir l'objet JS
-    .then(function displayBasket() {
+    .then((data) => {
+      // Récupération du panier de produit LS
+let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
+        displayBasket(productInLocalStorage, data);
         
-        deleteProduct();
-        costTotal();
-        changeBasket();
-        // formulaire();
-    })  
+    })
 
     // Si l'API ne répond pas
-    // .catch(function(err) {
-    //  const empty = document.querySelector("#cart_setting").innerHTML = "<h1>Votre panier est vide</h1>";
-    //  const inaccessible = document.createElement("p").innerText = "Toutes nos excuses, la base de données est inaccessible, revenir plus tard";
-    //  empty.appendChild(inaccessible);
-    // });
+    .catch(function(err) {
+     const empty = document.querySelector("#items");
+     empty.innerHTML = "<h1>Lepanier est vide</h1>";
+     const inaccessible = document.createElement("p");
+     inaccessible.innerHTML = "Toutes nos excuses, la base de données est inaccessible, revenir plus tard";
+     empty.appendChild(inaccessible);
+    });
 
 /*******------------- Affichage du panier - Fonction pour l'affichage du panier -------------*****************/
-displayBasket();
+
 
 function displayBasket(){
     const positionProduct = document.getElementById("cart__items");
@@ -159,8 +160,7 @@ function displayBasket(){
   
 /***************** ------------ Supprimer l'article ---------************************************************/
 
-
-function deleteProduct(){
+function deleteProduct () {
 
 const deleteProd = document.querySelectorAll(".deleteItem");
 
@@ -172,7 +172,7 @@ element.addEventListener("click",(e) => {
 
   //methode filter pour ne pas sortir de la variable les élements qui ont une couleur différente
   productInLocalStorage = productInLocalStorage.filter(element => element.color !== color_delete);
-  console.log(productInLocalStorage);
+  // console.log(productInLocalStorage);
   // envoi de la variable LS
   localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
   alert("Ce produit vient d'être supprimé")
@@ -189,7 +189,7 @@ const btn_deleteBasket_html = `
   document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
     const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
     btn_deleteBasket.style.width= "100%";
-      if (productInLocalStorage == null || productInLocalStorage == undefined){
+      if (productInLocalStorage == 0 || productInLocalStorage == undefined){
         btn_deleteBasket.style.display ="none";
         localStorage.clear();
       }
@@ -200,8 +200,10 @@ const btn_deleteBasket_html = `
     alert("Le panier est désormais vide") 
     window.location.href = "cart.html" 
   })
+  
 };
 deleteProduct();
+
  /******************** ------------ Fonction pour calculer le prix total ----------------************************/
  function costTotal (){
 
@@ -247,9 +249,11 @@ costTotal();
 
 function changeBasket ()
   {
+    
       // Sélectionner l'input
     let itemQuantity = document.querySelectorAll(".itemQuantity");
     let totalQuantity = document.getElementById("totalQuantity");
+    
     if (productInLocalStorage){
 
     // On écoute l'élément 
@@ -257,49 +261,47 @@ function changeBasket ()
         element.addEventListener("change", (e) =>  
       {         
       // e.preventDefault();
-
-      id = element.dataset._id;
-      color = element.dataset.color;
-      quantity = parseInt(element.value,10);
+      // if (itemQuantity > 0 && itemQuantity <100){
+          id = element.dataset._id;
+          color = element.dataset.color;
+          quantity = parseInt(element.value,10);
     
-      let foundElement = [];
-     // récupération du panier de produit LS
-     let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));  
+          let foundElement = [];
+          // récupération du panier de produit LS
+          let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));  
 
     productInLocalStorage.forEach(foundElement => {
       
-      // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne
-      if (foundElement != null) {
-            
-        foundElement.quantity = quantity;
-        
-        console.log(quantity, "miladiou");
-        
-      }
-      else { 
-          // sinon on push le panier dans le LS
-          productInLocalStorage.push(cart);
-          console.log(panier);
-      }
-      if (id == foundElement._id && color == foundElement.color) {
-        //stockage de l'élément dans une variable
-        foundElement = element; 
-        };   
-      })
-
-     
-    
+            // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne
+            if (foundElement != null) {
+              let foundElement = productInLocalStorage.find(p => p.id == element._id);
+              console.log("find id", foundElement);
+              foundElement.quantity = quantity;
+              
+              console.log(quantity, "miladiou");
+              
+            }
+            else { 
+                // sinon on push le panier dans le LS
+                productInLocalStorage.push(cart);
+                console.log("panier");
+            }
+            if (id == foundElement._id && color == foundElement.color) {
+              //stockage de l'élément dans une variable
+              foundElement = element; 
+              console.log(quantity, "coucou");
+                };           
+        })
           
         //créer une condition si, même id et même couleur que les éléments du panier
     
-        localStorage.setItem("panier", JSON.stringify(productInLocalStorage, quantity));
+        localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
           
-        totalQuantity += quantity;  
         alert("Ce produit a bien été modifié");
 
         location.reload(true);         
-        })
-      }) 
+           })
+          })
   }
 
   let deleteItem = document.querySelectorAll(".deleteItem");
@@ -451,20 +453,20 @@ function changeBasket ()
  
 /***********************-------- Old Method -------- *********************/
 // Ecoute la validation de la commande lors de l'envoi du formulaire
-// document.getElementById("order").addEventListener("click",function(){
+document.getElementById("order").addEventListener("click",function(){
 //     //champs à compléter
 
-//     var valid = true;
-//     for(let input of document.querySelectorAll(".form")){
-//         valid = valid && input.reportValidity();
-//         if(!valid){
-//             break;
-//         }
-//     }
-    // if(valid){
-    //     if (window.confirm('Votre commande a bien été prise en compte')){
-    //     window.location.href = "confirmation.html?id=" ;
-    //     }
-    // }
-    // }
+    var valid = true;
+    for(let input of document.querySelectorAll(".form")){
+        valid = valid && input.reportValidity();
+        if(!valid){
+            break;
+        }
+    }
+    if(valid){
+        if (window.confirm('Votre commande a bien été prise en compte')){
+        window.location.href = "confirmation.html" ;
           }
+        }
+      })
+    } 
