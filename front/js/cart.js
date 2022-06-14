@@ -22,11 +22,11 @@ displayBasket();
      })
 
      //2ème promesse: obtenir les données prix
-    // .then((data) => {
-    //   // Récupération du prix produit LS
-    //     let kanap = data;
-    //     return kanap.price; 
-    // });
+    .then((data) => {
+      // Récupération du prix produit LS
+        let kanap = data;
+        return kanap.price; 
+    });
 
 /*******------------- Affichage du panier - Fonction pour l'affichage du panier -------------*****************/
 
@@ -205,6 +205,7 @@ const btn_deleteBasket_html = `
 deleteProduct();
 
  /******************** ------------ Fonction pour calculer le prix total ----------------************************/
+ 
  function costTotal (){
 
   let countTot = [];
@@ -229,6 +230,7 @@ deleteProduct();
     
 
 /******************** ------------ Calcul du prix total de la commande ---************************/
+
 let costProducts = [];
   
   for(let i = 0; i < productInLocalStorage.length; i++){
@@ -292,16 +294,14 @@ function changeBasket ()
           
         //créer une condition si, même id et même couleur que les éléments du panier
         if (quantity > 0 && quantity< 100){
-            localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
-              
+            localStorage.setItem("panier", JSON.stringify(productInLocalStorage));             
             alert("Ce produit a bien été modifié");
         }
         location.reload(true);         
            })
-          })
+        })
   }
         
-
   let deleteItem = document.querySelectorAll(".deleteItem");
                     deleteItem.forEach(element =>{
                         element.addEventListener('change', (e) => {
@@ -318,8 +318,8 @@ function changeBasket ()
             }
           
  changeBasket();
-
-// //**Formulaire**/
+  
+ /********************--------------   Formulaire  ------------------------------------------*******************/
 
 function formulaire () {
 
@@ -487,6 +487,9 @@ const TextRegex = function(inputText){
             }
             sendOrder(order);
           }
+          
+      }else{
+        alert("Veuillez saisir l'intégralité des champs de ce formulaire, merci")
       }
   })   
 }

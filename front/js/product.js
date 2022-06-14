@@ -119,12 +119,16 @@ const getProduct = async function () {
                     //sinon on ajoute une ligne au panier dans LS
                     }else{
                         products.push(optionsProduit);
-                    } 
+                        
+                    }
                 
                 //envoie du panier au LS
                 localStorage.setItem("panier", JSON.stringify(products));
                 
+            }else{
+                alert("Veuillez choisir une couleur et une quantité correctes");
             }
+
 
         })
     } 
