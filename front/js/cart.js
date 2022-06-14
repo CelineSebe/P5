@@ -4,7 +4,7 @@ let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
 displayBasket();
 //Mise en place de l'Api
 
- fetch('http://localhost:3000/api/products/')
+  fetch('http://localhost:3000/api/products/')
     .then(function(response) {
       if (response.ok){
         return response.json();
@@ -76,6 +76,7 @@ function displayBasket(){
       //   document.getElementById("cart_items");
       //   positionProduct.innerHTML = structureBasket;
       // }
+
       /**************__________Construction Cart DOM____________*******/
     }else{
         this.structureBasket = [];
@@ -156,52 +157,53 @@ function displayBasket(){
             let totalPrice = document.querySelector("#totalPrice");
             let quantity = parseInt(cartInput.value, 10);
             }
-      }
-    }
+          }
+        };
   
 /***************** ------------ Supprimer l'article ---------************************************************/
 
 function deleteProduct () {
 
-const deleteProd = document.querySelectorAll(".deleteItem");
+  const deleteProd = document.querySelectorAll(".deleteItem");
 
-// selection du produit supprimé en cliquant sur le texte "supprimer"
-deleteProd.forEach(element => {
-element.addEventListener("click",(e) => {
-  e.preventDefault();
-  color_delete = element.dataset.color;
+  // selection du produit supprimé en cliquant sur le texte "supprimer"
+  deleteProd.forEach(element => {
+  element.addEventListener("click",(e) => {
+    e.preventDefault();
+    color_delete = element.dataset.color;
 
-  //methode filter pour ne pas sortir de la variable les élements qui ont une couleur différente
-  productInLocalStorage = productInLocalStorage.filter(element => element.color !== color_delete);
-  // console.log(productInLocalStorage);
-  // envoi de la variable LS
-  localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
-  alert("Ce produit vient d'être supprimé")
-  window.location.href = "cart.html";
-  })
-})
+    //methode filter pour ne pas sortir de la variable les élements qui ont une couleur différente
+    productInLocalStorage = productInLocalStorage.filter(element => element.color !== color_delete);
+    // console.log(productInLocalStorage);
+    // envoi de la variable LS
+    localStorage.setItem("panier", JSON.stringify(productInLocalStorage));
+    alert("Ce produit vient d'être supprimé")
+    window.location.href = "cart.html";
+    })
+});
 
 /************************ ------- Vider le panier ---------***************************************************************/
 
-const btn_deleteBasket_html = `
-<button class ="btn_supprimerPanier"> Vider le panier </button>`;
+  const btn_deleteBasket_html = `
+  <button class ="btn_supprimerPanier"> Vider le panier </button>`;
 
-//insertion du bouton dans le html
-  document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
-    const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
-    btn_deleteBasket.style.width= "100%";
-      if (productInLocalStorage == 0 || productInLocalStorage == undefined){
-        btn_deleteBasket.style.display ="none";
-        localStorage.clear();
-      }
-  //suppression key "panier" pour vider LS
-  btn_deleteBasket.addEventListener('click', (e)=> {
-    e.preventDefault();
-    localStorage.removeItem("panier");
-    alert("Le panier est désormais vide") 
-    window.location.href = "cart.html" 
-  }) 
-};
+  //insertion du bouton dans le html
+    document.getElementById("cart__items").insertAdjacentHTML("beforeend",btn_deleteBasket_html);
+      const btn_deleteBasket = document.querySelector(".btn_supprimerPanier");
+      btn_deleteBasket.style.width= "100%";
+        if (productInLocalStorage == 0 || productInLocalStorage == undefined){
+          btn_deleteBasket.style.display ="none";
+          localStorage.clear();
+        }
+    //suppression key "panier" pour vider LS
+    btn_deleteBasket.addEventListener('click', (e)=> {
+      e.preventDefault();
+      localStorage.removeItem("panier");
+      alert("Le panier est désormais vide") 
+      window.location.href = "cart.html" 
+    }) 
+  };
+
 deleteProduct();
 
  /******************** ------------ Fonction pour calculer le prix total ----------------************************/
@@ -231,18 +233,19 @@ deleteProduct();
 
 /******************** ------------ Calcul du prix total de la commande ---************************/
 
-let costProducts = [];
-  
-  for(let i = 0; i < productInLocalStorage.length; i++){
-    const priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
-    costProducts.push(priceBasket);
-    console.log(priceBasket, "price basket");
-  }
+  let costProducts = [];
+    
+    for(let i = 0; i < productInLocalStorage.length; i++){
+      const priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
+      costProducts.push(priceBasket);
+      console.log(priceBasket, "price basket");
+    }
 
-const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-const totalPrice = document.getElementById("totalPrice");
-  totalPrice.textContent = sumPriceBasket;
+  const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const totalPrice = document.getElementById("totalPrice");
+    totalPrice.textContent = sumPriceBasket;
 };
+
 costTotal();
 
 /***************** ------------ Modifier la quantité/prix totaux du panier ----------***********************************/
@@ -269,7 +272,7 @@ function changeBasket ()
           // récupération du panier de produit LS
           let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));  
 
-    productInLocalStorage.forEach(foundElement => {
+          productInLocalStorage.forEach(foundElement => {
       
             // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne
             if (foundElement != null) {
@@ -280,7 +283,7 @@ function changeBasket ()
               console.log(quantity, "miladiou");
               
             }
-            else { 
+            else{ 
                 // sinon on push le panier dans le LS
                 productInLocalStorage.push(cart);
                 console.log("panier");
@@ -290,17 +293,17 @@ function changeBasket ()
               foundElement = element; 
               console.log(quantity, "coucou");
                 };           
-        })
+          })
           
-        //créer une condition si, même id et même couleur que les éléments du panier
-        if (quantity > 0 && quantity< 100){
-            localStorage.setItem("panier", JSON.stringify(productInLocalStorage));             
-            alert("Ce produit a bien été modifié");
-        }
-        location.reload(true);         
-           })
-        })
-  }
+          //créer une condition si, même id et même couleur que les éléments du panier
+          if (quantity > 0 && quantity< 100){
+              localStorage.setItem("panier", JSON.stringify(productInLocalStorage));             
+              alert("Ce produit a bien été modifié");
+          }
+          location.reload(true);         
+            })
+          })
+    }
         
   let deleteItem = document.querySelectorAll(".deleteItem");
                     deleteItem.forEach(element =>{
@@ -323,57 +326,56 @@ function changeBasket ()
 
 function formulaire () {
 
-  // Selection du bloc HTML formulaire
-let form = document.querySelector(".cart__order__form");
+    // Selection du bloc HTML formulaire
+  let form = document.querySelector(".cart__order__form");
 
-  // Assignation des RegExp pour chaque type de saisie possible
+    // Assignation des RegExp pour chaque type de saisie possible
 
-  //Ecoute de la modification des input du formulaire
-form.firstName.addEventListener('change', function(){
-  TextRegex(this);
-});
+    //Ecoute de la modification des input du formulaire
+  form.firstName.addEventListener('change', function(){
+    TextRegex(this);
+  });
 
-form.lastName.addEventListener('change', function(){
-  TextRegex(this);
-});
+  form.lastName.addEventListener('change', function(){
+    TextRegex(this);
+  });
 
-form.address.addEventListener('change', function(){
-  AddressRegex(this);
-});
+  form.address.addEventListener('change', function(){
+    AddressRegex(this);
+  });
 
-form.city.addEventListener('change', function(){
-  AddressRegex(this);
-});
+  form.city.addEventListener('change', function(){
+    AddressRegex(this);
+  });
 
-form.email.addEventListener('change', function(){
-  EmailRegex(this);
-});
+  form.email.addEventListener('change', function(){
+    EmailRegex(this);
+  });
 
-  //Fonctions pour valider le formulaire sous condition
-  //pour valider le texte
-const TextRegex = function(inputText){
+    //Fonctions pour valider le formulaire sous condition
+    //pour valider le texte
+  const TextRegex = function(inputText){
 
-  let Regexp = new RegExp('^[a-z.\'\s éêèàëÉÈÊË\-]{1,25}$', 'gi');
-  //Récupérer le p sous l'input
-  let textMsg = inputText.nextElementSibling;
-  
-  //Si FALSE, on définit un message
-  if(Regexp.test(inputText.value) === false){
-      if(textMsg != null)
-      {
-        textMsg.innerHTML = "Saisie invalide";
-        textMsg.innerHTML.color = "red";
-        inputText.innerHTML.backgroundColor = "red";
-      }
-      return false;
-  }else{
-      if (textMsg != null)
-      {
-        inputText.innerHTML.backgroundColor = "green";
-      }
-      return true;
-  }
-
+    let Regexp = new RegExp('^[a-z.\'\s éêèàëÉÈÊË\-]{1,25}$', 'gi');
+    //Récupérer le p sous l'input
+    let textMsg = inputText.nextElementSibling;
+    
+    //Si FALSE, on définit un message
+    if(Regexp.test(inputText.value) === false){
+        if(textMsg != null)
+        {
+          textMsg.innerHTML = "Saisie invalide";
+          textMsg.innerHTML.color = "red";
+          inputText.innerHTML.backgroundColor = "red";
+        }
+        return false;
+    }else{
+        if (textMsg != null)
+        {
+          inputText.innerHTML.backgroundColor = "green";
+        }
+        return true;
+    }
   }
 
   const AddressRegex = function(inputAddress){
@@ -381,51 +383,49 @@ const TextRegex = function(inputText){
     let Regexp = new RegExp('^[a-zA-ZéêèàëÉÈÊË0-9.,-\s ]{2,90}$', 'g');
     //Récupérer le p sous l'input
     let adressMsg = inputAddress.nextElementSibling;
-    
-    //Si FALSE, on définit un message
-    if(Regexp.test(inputAddress.value) === false){
-        if(adressMsg != null)
-        {
-          adressMsg.innerHTML = "Saisie invalide";
-          adressMsg.innerHTML.color = "red";
-          inputAddress.innerHTML.backgroundColor = "red";
-        }
-        return false;
-    }else{
-        if (adressMsg != null)
-        {
-          inputAddress.innerHTML.backgroundColor = "green";
-        }
-        return true;
-    }
-  
-    }
-
-    const EmailRegex = function(inputEmail){
-
-      let Regexp = new RegExp('^[a-zA-ZéêèàëÉÈÊË0-9.,-\s ]{2,90}$', 'g');
-      //Récupérer le p sous l'input
-      let emailMsg = inputEmail.nextElementSibling;
       
-      //Si FALSE, on définit un message
-      if(Regexp.test(inputEmail.value) === false){
-          if(emailMsg != null)
+    //Si FALSE, on définit un message
+      if(Regexp.test(inputAddress.value) === false){
+          if(adressMsg != null)
           {
-            emailMsg.innerHTML = "Saisie invalide";
-            // emailMsg.innerHTML.color = "red";
+            adressMsg.innerHTML = "Saisie invalide";
+            adressMsg.innerHTML.color = "red";
+            inputAddress.innerHTML.backgroundColor = "red";
           }
           return false;
       }else{
-          if (emailMsg != null)
+          if (adressMsg != null)
           {
-            inputEmail.innerHTML.backgroundColor = "green";
+            inputAddress.innerHTML.backgroundColor = "green";
           }
           return true;
+        }
       }
-    
-    };
 
-    let commandBtn = document.querySelector(".cart__order__form__submit");
+  const EmailRegex = function(inputEmail){
+
+        let Regexp = new RegExp('^[a-zA-ZéêèàëÉÈÊË0-9.,-\s ]{2,90}$', 'g');
+        //Récupérer le p sous l'input
+        let emailMsg = inputEmail.nextElementSibling;
+        
+        //Si FALSE, on définit un message
+        if(Regexp.test(inputEmail.value) === false){
+            if(emailMsg != null)
+            {
+              emailMsg.innerHTML = "Saisie invalide";
+              // emailMsg.innerHTML.color = "red";
+            }
+            return false;
+        }else{
+            if (emailMsg != null)
+            {
+              inputEmail.innerHTML.backgroundColor = "green";
+            }
+            return true;
+        }
+      };
+
+  let commandBtn = document.querySelector(".cart__order__form__submit");
 
     commandBtn.addEventListener("click", function(e){
       e.preventDefault();
@@ -486,13 +486,13 @@ const TextRegex = function(inputText){
                 .catch((err) => console.log('Erreur : ' +err));
             }
             sendOrder(order);
-          }
-          
-      }else{
-        alert("Veuillez saisir l'intégralité des champs de ce formulaire, merci")
-      }
-  })   
-}
+          }    
+        }else{
+          alert("Veuillez saisir l'intégralité des champs de ce formulaire, merci")
+        }
+      })   
+  }
+
 formulaire();  
 }
      
