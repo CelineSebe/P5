@@ -41,7 +41,7 @@ const getProduct = async function () {
         
         //Loop pour afficher toutes les options couleurs dans le formulaire
 
-            // function loopForColors(kanap) {
+            function loopForColors() {
                 for (let i = 0; i < kanap.colors.length; i+=1){
                     let option = kanap.colors[i];
                     choiceColor = document.createElement("option");
@@ -49,6 +49,8 @@ const getProduct = async function () {
                     choiceColor.value = option;
                     select.appendChild(choiceColor);
                     }
+            }
+            loopForColors();
 
 /**************************-----------------Localstorage------------------------***********************/
     

@@ -21,12 +21,12 @@ displayBasket();
       empty.appendChild(inaccessible);
      })
 
-     //2ème promesse: obtenir l'
-    .then((data) => {
-      // Récupération du prix produit LS
-        let kanap = data;
-        return kanap.price; 
-    });
+     //2ème promesse: obtenir les données prix
+    // .then((data) => {
+    //   // Récupération du prix produit LS
+    //     let kanap = data;
+    //     return kanap.price; 
+    // });
 
 /*******------------- Affichage du panier - Fonction pour l'affichage du panier -------------*****************/
 
@@ -200,8 +200,7 @@ const btn_deleteBasket_html = `
     localStorage.removeItem("panier");
     alert("Le panier est désormais vide") 
     window.location.href = "cart.html" 
-  })
-  
+  }) 
 };
 deleteProduct();
 
@@ -236,13 +235,11 @@ let costProducts = [];
     const priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
     costProducts.push(priceBasket);
     console.log(priceBasket, "price basket");
-   
   }
 
 const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 const totalPrice = document.getElementById("totalPrice");
   totalPrice.textContent = sumPriceBasket;
-
 };
 costTotal();
 
@@ -250,7 +247,6 @@ costTotal();
 
 function changeBasket ()
   {
-    
     //  Sélectionner l'input
     let itemQuantity = document.querySelectorAll(".itemQuantity");
     let totalQuantity = document.getElementById("totalQuantity");
@@ -261,7 +257,7 @@ function changeBasket ()
   itemQuantity.forEach(element => {
         element.addEventListener("change", (e) =>  
       {         
-      // e.preventDefault();
+      e.preventDefault();
       // if (itemQuantity > 0 && itemQuantity <100){
           id = element.dataset._id;
           color = element.dataset.color;
@@ -367,13 +363,13 @@ const TextRegex = function(inputText){
       {
         textMsg.innerHTML = "Saisie invalide";
         textMsg.innerHTML.color = "red";
-        // inputText.innerHTML.backgroundcolor = "red";
+        inputText.innerHTML.backgroundColor = "red";
       }
       return false;
   }else{
       if (textMsg != null)
       {
-        inputText.innerHTML.backgroundcolor = "green";
+        inputText.innerHTML.backgroundColor = "green";
       }
       return true;
   }
@@ -392,13 +388,13 @@ const TextRegex = function(inputText){
         {
           adressMsg.innerHTML = "Saisie invalide";
           adressMsg.innerHTML.color = "red";
-          // inputAddress.innerHTML.backgroundcolor = "red";
+          inputAddress.innerHTML.backgroundColor = "red";
         }
         return false;
     }else{
         if (adressMsg != null)
         {
-          inputAddress.innerHTML.backgroundcolor = "green";
+          inputAddress.innerHTML.backgroundColor = "green";
         }
         return true;
     }
@@ -416,13 +412,13 @@ const TextRegex = function(inputText){
           if(emailMsg != null)
           {
             emailMsg.innerHTML = "Saisie invalide";
-            emailMsg.innerHTML.color = "red";
+            // emailMsg.innerHTML.color = "red";
           }
           return false;
       }else{
           if (emailMsg != null)
           {
-            inputEmail.innerHTML.backgroundcolor = "green";
+            inputEmail.innerHTML.backgroundColor = "green";
           }
           return true;
       }
@@ -461,22 +457,22 @@ const TextRegex = function(inputText){
                   email : document.querySelector("#email").value,
               }
               console.log(contacts);
-              let kanap = [];
-              for (cart of productInLocalStorage) {
-                  kanap.push(kanap._id);
-              }
-              console.log(kanap);
+              let products = [];
+              for (let i = 0; i < productInLocalStorage.length; i++) {
+                  products.push(productInLocalStorage[i]._id);
+              };
+              console.log(products);
               let order = {
                   contact: contacts,
-                  kanap: kanap,
+                  products: products,
               }
               const sendOrder = async function () {
                 const options = {
-                    method: "POST",
+                    method: 'POST',
                     body: JSON.stringify(order),
                     headers: {
                         'Accept': 'application/json',
-                        "Content-Type": "application/json"
+                        'Content-Type': 'application/json'
                     },
                 }
                 fetch("http://localhost:3000/api/products/order", options)
@@ -485,7 +481,7 @@ const TextRegex = function(inputText){
                     console.log(data);
                     localStorage.clear();
                     localStorage.setItem("orderID", data.orderId);
-                    window.location.href = 'confirmation.html?id='+ data.orderId;
+                    document.location.href = 'confirmation.html?id='+ data.orderId;
                 })
                 .catch((err) => console.log('Erreur : ' +err));
             }
@@ -494,8 +490,9 @@ const TextRegex = function(inputText){
       }
   })   
 }
-
-formulaire();       
+formulaire();  
+}
+     
 
 /***********************-------- Old Method -------- *********************/
 // Ecoute la validation de la commande lors de l'envoi du formulaire
@@ -515,4 +512,4 @@ formulaire();
 //           }
 //         }
 //       })
-    } 
+    
