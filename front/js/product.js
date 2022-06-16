@@ -65,14 +65,6 @@ const getProduct = async function () {
             let choiceColor = document.querySelector("#colors").selectedOptions[0].value;
             let choixQuantity = parseInt( document.querySelector("#quantity").value,10);
 
-/****************************** ----------- OLD METHODE -------------  *********************************/
-            // const confirmation = () => {
-            //     if (window.confirm('Votre commande est bien ajoutée au panier.')) {
-            //         window.location.href = `./cart.html`;
-            //         }
-            //     }
-            //     confirmation ();
-
 
 /****************************** ------- La gestion du panier--------- ***********************************/
 
@@ -136,4 +128,14 @@ const getProduct = async function () {
 })
 }
 getProduct();
+
+/****************************** ----------- OLD METHODE -------------  *********************************/
+            // const confirmation = () => {
+            //     if (window.confirm('Votre commande est bien ajoutée au panier.')) {
+            //         window.location.href = `./cart.html`;
+            //         }
+            //     }
+            //     confirmation ();
+
+
 

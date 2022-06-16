@@ -3,8 +3,8 @@
 let productInLocalStorage = JSON.parse(localStorage.getItem("panier"));
 displayBasket();
 //Mise en place de l'Api
-
-  fetch('http://localhost:3000/api/products/')
+async function getProduct(id){
+  return fetch(`http://localhost:3000/api/products/${id}`)
     .then(function(response) {
       if (response.ok){
         return response.json();
@@ -22,12 +22,12 @@ displayBasket();
      })
 
      //2ème promesse: obtenir les données prix
-    .then((data) => {
-      // Récupération du prix produit LS
-        let kanap = data;
-        return kanap.price; 
-    });
-
+    // .then((data) => {
+    //   // Récupération du prix produit LS
+    //     let kanap = data;
+    //     return kanap.price; 
+    // });
+  }
 /*******------------- Affichage du panier - Fonction pour l'affichage du panier -------------*****************/
 
 
@@ -262,7 +262,7 @@ function changeBasket ()
   itemQuantity.forEach(element => {
         element.addEventListener("change", (e) =>  
       {         
-      e.preventDefault();
+      // e.preventDefault();
       // if (itemQuantity > 0 && itemQuantity <100){
           id = element.dataset._id;
           color = element.dataset.color;
@@ -280,18 +280,18 @@ function changeBasket ()
               console.log("find id", foundElement);
               foundElement.quantity = quantity;
               
-              console.log(quantity, "miladiou");
+              // console.log(quantity, "miladiou");
               
             }
             else{ 
                 // sinon on push le panier dans le LS
                 productInLocalStorage.push(cart);
-                console.log("panier");
+                // console.log("panier");
             }
             if (id == foundElement._id && color == foundElement.color) {
               //stockage de l'élément dans une variable
               foundElement = element; 
-              console.log(quantity, "coucou");
+              // console.log(quantity, "coucou");
                 };           
           })
           
@@ -318,7 +318,7 @@ function changeBasket ()
                             
                         })
                   })
-            }
+            };
           
  changeBasket();
   
@@ -364,15 +364,15 @@ function formulaire () {
     if(Regexp.test(inputText.value) === false){
         if(textMsg != null)
         {
-          textMsg.innerHTML = "Saisie invalide";
-          textMsg.innerHTML.color = "red";
-          inputText.innerHTML.backgroundColor = "red";
+          // textMsg.innerHTML = "Saisie invalide";
+          // textMsg.innerHTML.color = "red";
+          inputText.style.backgroundColor = "#FF6347";
         }
         return false;
     }else{
         if (textMsg != null)
         {
-          inputText.innerHTML.backgroundColor = "green";
+          inputText.style.backgroundColor = "#50C878";
         }
         return true;
     }
@@ -388,15 +388,15 @@ function formulaire () {
       if(Regexp.test(inputAddress.value) === false){
           if(adressMsg != null)
           {
-            adressMsg.innerHTML = "Saisie invalide";
-            adressMsg.innerHTML.color = "red";
-            inputAddress.innerHTML.backgroundColor = "red";
+            // adressMsg.innerHTML = "Saisie invalide";
+            // adressMsg.innerHTML.color = "red";
+            inputAddress.style.backgroundColor = "#FF6347";
           }
           return false;
       }else{
           if (adressMsg != null)
           {
-            inputAddress.innerHTML.backgroundColor = "green";
+            inputAddress.style.backgroundColor = "#50C878";
           }
           return true;
         }
@@ -404,7 +404,7 @@ function formulaire () {
 
   const EmailRegex = function(inputEmail){
 
-        let Regexp = new RegExp('^[a-zA-ZéêèàëÉÈÊË0-9.,-\s ]{2,90}$', 'g');
+        let Regexp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
         //Récupérer le p sous l'input
         let emailMsg = inputEmail.nextElementSibling;
         
@@ -412,14 +412,15 @@ function formulaire () {
         if(Regexp.test(inputEmail.value) === false){
             if(emailMsg != null)
             {
-              emailMsg.innerHTML = "Saisie invalide";
+              // emailMsg.innerHTML = "Saisie invalide";
               // emailMsg.innerHTML.color = "red";
+              inputEmail.style.backgroundColor = "#FF6347";
             }
             return false;
         }else{
             if (emailMsg != null)
             {
-              inputEmail.innerHTML.backgroundColor = "green";
+              inputEmail.style.backgroundColor = "#50C878";
             }
             return true;
         }
@@ -479,16 +480,16 @@ function formulaire () {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    localStorage.clear();
                     localStorage.setItem("orderID", data.orderId);
                     document.location.href = 'confirmation.html?id='+ data.orderId;
+                    localStorage.clear();
                 })
                 .catch((err) => console.log('Erreur : ' +err));
             }
             sendOrder(order);
           }    
         }else{
-          alert("Veuillez saisir l'intégralité des champs de ce formulaire, merci")
+          alert("Veuillez saisir correctement les champs de ce formulaire, merci")
         }
       })   
   }
