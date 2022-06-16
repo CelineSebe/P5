@@ -63,7 +63,7 @@ const getProduct = async function () {
         btnSendBasket.addEventListener('click', (e) => {
             e.preventDefault();
             let choiceColor = document.querySelector("#colors").selectedOptions[0].value;
-            let choixQuantity = parseInt( document.querySelector("#quantity").value,10);
+            let choixQuantity = parseInt(document.querySelector("#quantity").value,10);
 
 
 /****************************** ------- La gestion du panier--------- ***********************************/
@@ -78,7 +78,7 @@ const getProduct = async function () {
                     _id: id,
                     name: kanap.name,     
                     image: kanap.imageUrl,
-                    price: kanap.price,
+                    // price: kanap.price,
                  };
 
 

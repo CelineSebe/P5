@@ -22,11 +22,12 @@ async function getProduct(id){
      })
 
      //2ème promesse: obtenir les données prix
-    // .then((data) => {
-    //   // Récupération du prix produit LS
-    //     let kanap = data;
-    //     return kanap.price; 
-    // });
+    .then((data) => {
+      
+      // Récupération du prix produit LS
+        let kanap = data;
+        return kanap.price; 
+    });
   }
 /*******------------- Affichage du panier - Fonction pour l'affichage du panier -------------*****************/
 
@@ -80,6 +81,7 @@ function displayBasket(){
       /**************__________Construction Cart DOM____________*******/
     }else{
         this.structureBasket = [];
+        
         //si le localstorage n'est pas vide
         if (productInLocalStorage){
         for (let cart in productInLocalStorage){
@@ -116,8 +118,11 @@ function displayBasket(){
 
           let paragraphe__price = document.createElement("p");
           cart__title.appendChild(paragraphe__price);
-          paragraphe__price.innerHTML = productInLocalStorage[cart].price + '€';
-
+          let price = getProduct(productInLocalStorage[cart]._id)
+          .then((data) => 
+          {
+          paragraphe__price.innerHTML = data + '€';
+          })
           let cart__item__content__settings = document.createElement("div");
           cart__item__content.appendChild(cart__item__content__settings);
           cart__item__content__settings.classList.add("cart__item__content__settings");
@@ -151,13 +156,15 @@ function displayBasket(){
           deleteItem.dataset._idElement = productInLocalStorage[cart]._id;
           deleteItem.dataset.color = productInLocalStorage[cart].color;
           deleteItem.classList.add("deleteItem");
-          
           // Gestion des quantités à afficher
-            let totalQuantity = document.querySelector("#totalQuantity");
-            let totalPrice = document.querySelector("#totalPrice");
-            let quantity = parseInt(cartInput.value, 10);
-            }
+          let totalQuantity = document.querySelector("#totalQuantity");
+          let totalPrice = document.querySelector("#totalPrice");
+          let quantity = parseInt(cartInput.value, 10);
+          
+            
           }
+          }
+        
         };
   
 /***************** ------------ Supprimer l'article ---------************************************************/
@@ -220,7 +227,7 @@ deleteProduct();
   /******************** -------------  Calcul du nombre d'articles ----------************************/
 
   const sumQuantityBasket = countTot.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  const totalQuantity = document.getElementById("totalQuantity");
+  // const totalQuantity = document.getElementById("totalQuantity");
   console.log(sumQuantityBasket, "sumQuantityBasket");
       
       if(sumQuantityBasket > 1){
@@ -232,19 +239,28 @@ deleteProduct();
     
 
 /******************** ------------ Calcul du prix total de la commande ---************************/
+for (let cart in productInLocalStorage){
+    let price = getProduct(productInLocalStorage[cart]._id)
+    .then((data) =>
+    {
+      let costProducts = [];
+        
+        for(let i = 0; i < productInLocalStorage.length; i++){
+          let priceBasket = data * productInLocalStorage[i].quantity;
+          costProducts.push(priceBasket);
+          console.log(priceBasket, "price basket");
+          
+        }
+          
+        let totalPrice = document.querySelector("#totalPrice");
 
-  let costProducts = [];
-    
-    for(let i = 0; i < productInLocalStorage.length; i++){
-      const priceBasket = productInLocalStorage[i].price * productInLocalStorage[i].quantity;
-      costProducts.push(priceBasket);
-      console.log(priceBasket, "price basket");
+        const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      // const totalPrice = document.getElementById("totalPrice");
+        totalPrice.textContent = sumPriceBasket;
+        console.log(sumPriceBasket, "sumPriceBasket")
+      })
     }
-
-  const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  const totalPrice = document.getElementById("totalPrice");
-    totalPrice.textContent = sumPriceBasket;
-};
+  };
 
 costTotal();
 
