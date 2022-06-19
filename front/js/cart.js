@@ -192,34 +192,32 @@ deleteProduct();
  
 function costTotal ()
 {
-  
   /******************** -------------  Calcul du nombre d'articles ----------************************/
 
-          let countTot = [];
-              for(let j= 0; j < productInLocalStorage.length; j++)
-              {
-              const quantityBasket = productInLocalStorage[j].quantity;
-              countTot.push(quantityBasket);
-              console.log("youyou",countTot);
-              }
+  let countTot = [];
+  for(let j= 0; j < productInLocalStorage.length; j++)
+  {
+    const quantityBasket = productInLocalStorage[j].quantity;
+    countTot.push(quantityBasket);
+    console.log("youyou",countTot);
+  }
     
   const sumQuantityBasket = countTot.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
   let totalQuantity = document.getElementById("totalQuantity");
-    // console.log(sumQuantityBasket, "sumQuantityBasket");
     
-            if(sumQuantityBasket > 1)
-            {
-            totalQuantity.insertAdjacentHTML("beforeend", sumQuantityBasket + " " + "articles");
-            }
-            else
-            {
-            totalQuantity.innerText = sumQuantityBasket + " " + "article";
-            };
-    if(sumQuantityBasket >= 100)
-    {
-    localStorage.clear();
+  if(sumQuantityBasket > 1)
+  {
+    totalQuantity.insertAdjacentHTML("beforeend", sumQuantityBasket + " " + "articles");
+  }else
+  {
+    totalQuantity.innerText = sumQuantityBasket + " " + "article";
+  };
+
+  if(sumQuantityBasket > 99)
+  {
     alert("Vous devez sélectionner moins de 100 articles");
-    }
+    localStorage.removeItem(productInLocalStorage);
+  };
 
 /******************** ------------ Calcul du prix total de la commande ---************************/
   for (let cart in productInLocalStorage)
@@ -230,14 +228,14 @@ function costTotal ()
       let costProducts = [];  
       for(let i = 0; i < productInLocalStorage.length; i++)
       {
-      let priceBasket = data * productInLocalStorage[i].quantity;
-      costProducts.push(priceBasket);
-      console.log(priceBasket, "price basket"); 
+        let priceBasket = data * productInLocalStorage[i].quantity;
+        costProducts.push(priceBasket);
+        console.log(priceBasket, "price basket"); 
       }        
-      let totalPrice = document.querySelector("#totalPrice");
-      const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        let totalPrice = document.querySelector("#totalPrice");
+        const sumPriceBasket = costProducts.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-      totalPrice.textContent = sumPriceBasket;
+        totalPrice.textContent = sumPriceBasket;
 
     })
   }
@@ -253,22 +251,19 @@ function changeBasket ()
   {
     // Gestion des quantités à afficher
     let totalQuantity = document.getElementById("totalQuantity");
-  
     //  Sélectionner l'input
     let cartInput = document.querySelectorAll(".itemQuantity");
     let quantity = parseInt(cartInput.value,10);
-    console.log(cartInput, "quantity");
+
     // On écoute l'élément 
     cartInput.forEach(element => 
     {
-      element.addEventListener("change", (event) =>  
+      element.addEventListener("change", (event) => 
       {
-      
-        // let article = event.target.closest('[data-id]');
+  
         color = element.dataset.color;
         quantity = parseInt(element.value, 10);
         id = element.dataset.idElement;
-        console.log("id",id,"color", color, "quantity", quantity);
         
         let foundElement = [];
         // récupération du panier de produit LS
@@ -278,49 +273,44 @@ function changeBasket ()
               productInLocalStorage.forEach(foundElement => 
               {
                 if (foundElement != null){
+                  //stockage de l'élément dans une variable
                   let foundElement = productInLocalStorage.find(p => p.id == element._id);
                   foundElement = element;
                 }else{ 
                   // sinon on push le panier dans le LS
                   productInLocalStorage.push(foundElement);
-                  // console.log("panier");
                   };
+                
+                // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne               
                 if (id == foundElement._id && color == foundElement.color)
                 {
-                  //stockage de l'élément dans une variable
-                  // let foundElement = productInLocalStorage.find(p => p.id == element._id);
-                  foundElement.quantity = quantity; 
- 
-                };
-                
-           
+                  foundElement.quantity = quantity;
+                };             
               })
-            // si foundElement trouvé on ajoute la nouvelle quantité à l'ancienne
-                    
-                if (quantity > 0 && quantity < 100){
+            
+                if (quantity > 0 && quantity < 100)
+                {
                   localStorage.setItem("panier", JSON.stringify(productInLocalStorage));             
-                  // alert("Ce produit a bien été modifié");
                 }
-                  location.reload(true);
-                
+                  location.reload(true);       
               })  
             })
         
-let deleteItem = document.querySelectorAll(".deleteItem");
-deleteItem.forEach(element =>
-{
-  element.addEventListener('change', (e) => 
-  {
-    e.preventDefault();
-    let supId = element.dataset.idElement;
-    let supColor = element.dataset.color;
-    productInLocalStorage = productInLocalStorage.filter(p => p._id !== supId || p.color !== supColor);
-    localStorage.setItem('panier', JSON.stringify(productInLocalStorage));
-    totalQuantity -= quantity
-    location.reload();                          
-  })
-})
-}
+    let deleteItem = document.querySelectorAll(".deleteItem");
+    deleteItem.forEach(element =>
+    {
+      element.addEventListener('change', (e) => 
+      {
+        e.preventDefault();
+        let supId = element.dataset.idElement;
+        let supColor = element.dataset.color;
+        productInLocalStorage = productInLocalStorage.filter(p => p._id !== supId || p.color !== supColor);
+        localStorage.setItem('panier', JSON.stringify(productInLocalStorage));
+        totalQuantity -= quantity
+        location.reload();                          
+      })
+    })
+  }
 }
 changeBasket();
   
@@ -375,13 +365,17 @@ function formulaire ()
       if(textMsg != null)
       {
           textMsg.innerHTML = "Saisie invalide";
-          textMsg.innerHTML.color = "red";
+          textMsg.style.color = "#FF6347";
+          textMsg.style.fontSize = "20px";
           inputText.style.backgroundColor = "#FF6347";
       }
       return false;
     }else{
         if (textMsg != null)
         {
+          textMsg.innerHTML = "Saisie valide";
+          textMsg.style.color = "#50C878";
+          textMsg.style.fontSize = "20px";
           inputText.style.backgroundColor = "#50C878";
         }
         return true;
@@ -401,7 +395,8 @@ function formulaire ()
           if(adressMsg != null)
           {
             adressMsg.innerHTML = "Saisie invalide";
-            adressMsg.innerHTML.color = "red";
+            adressMsg.style.color = "#FF6347";
+            adressMsg.style.fontSize = "20px";
             inputAddress.style.backgroundColor = "#FF6347";
           }
           return false;
@@ -409,6 +404,9 @@ function formulaire ()
       {
         if (adressMsg != null)
         {
+          adressMsg.innerHTML = "Saisie valide";
+          adressMsg.style.color = "#50C878";
+          adressMsg.style.fontSize = "20px";
           inputAddress.style.backgroundColor = "#50C878";
         }
           return true;
@@ -427,7 +425,8 @@ function formulaire ()
         if(emailMsg != null)
         {
           emailMsg.innerHTML = "Saisie invalide";
-          emailMsg.innerHTML.color = "red";
+          emailMsg.style.color = "#FF6347";
+          emailMsg.style.fontSize = "20px";
           inputEmail.style.backgroundColor = "#FF6347";
         }
           return false;
@@ -435,6 +434,9 @@ function formulaire ()
     {
         if (emailMsg != null)
         {
+          emailMsg.innerHTML = "Saisie valide";
+          emailMsg.style.color = "#50C878";
+          emailMsg.style.fontSize = "20px";
           inputEmail.style.backgroundColor = "#50C878";
         }
           return true;

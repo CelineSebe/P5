@@ -129,7 +129,8 @@ const getProduct = async function ()
                     }  
 
                     if (foundElement != null && foundElement.quantity > 99){
-                        alert("Vous ne pouvez pas ajouter d'articles");
+                        alert("Vous ne pouvez pas ajouter plus de 99 articles");
+                        localStorage.clear(foundElement);
                     }else{
                     //envoi du panier au LS
                     localStorage.setItem("panier", JSON.stringify(products)); 
